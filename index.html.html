@@ -1,0 +1,3457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Núcleo Digital — Sistemas y Plantillas Profesionales (nucleodigital.mx)</title>
+  <link id="site-favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231B4332'/%3E%3Cpath d='M18 44V20l14 14 14-14v24' fill='none' stroke='%23FAF9F6' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='46' r='3.5' fill='%23A7F3D0'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#FAF9F6',
+            card: '#FFFFFF',
+            stoneLine: '#E7E5E4',
+            ink: '#1C1917',
+            mutedInk: '#57534E',
+            forest: '#1B4332',
+            forestHover: '#143225',
+            terracotta: '#8C2D19',
+            sageBg: '#ECFDF5',
+            sageText: '#065F46',
+            terraBg: '#FEF2F2',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Newsreader', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF9F6;
+      color: #1C1917;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .font-editorial {
+      font-family: 'Newsreader', serif;
+    }
+    .border-subtle {
+      border-color: #E7E5E4;
+    }
+    /* Elementos visuales sutiles de fondo */
+    .bg-editorial-grid {
+      background-image:
+        radial-gradient(rgba(27, 67, 50, 0.08) 1px, transparent 1px),
+        linear-gradient(to right, rgba(231, 229, 228, 0.45) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(231, 229, 228, 0.45) 1px, transparent 1px);
+      background-size: 32px 32px, 96px 96px, 96px 96px;
+      background-position: -1px -1px;
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-14px) rotate(2deg); }
+    }
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(12px) rotate(-2deg); }
+    }
+    .ambient-orb-1 {
+      animation: floatSlow 14s ease-in-out infinite;
+    }
+    .ambient-orb-2 {
+      animation: floatReverse 18s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-editorial-grid">
+
+  <!-- Elementos Visuales Decorativos de Fondo -->
+  <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+    <div class="ambient-orb-1 absolute -top-28 -left-24 w-96 h-96 rounded-full bg-emerald-900/[0.045] blur-3xl"></div>
+    <div class="ambient-orb-2 absolute top-1/3 -right-28 w-[28rem] h-[28rem] rounded-full bg-amber-800/[0.04] blur-3xl"></div>
+    <div class="ambient-orb-1 absolute -bottom-32 left-1/4 w-[26rem] h-[26rem] rounded-full bg-forest/[0.04] blur-3xl"></div>
+
+    <!-- Retícula geométrica decorativa en esquina superior derecha -->
+    <svg class="hidden lg:block absolute top-20 right-8 w-56 h-56 text-forest/[0.055]" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="88" stroke="currentColor" stroke-width="1" stroke-dasharray="4 6"/>
+      <circle cx="100" cy="100" r="62" stroke="currentColor" stroke-width="1"/>
+      <path d="M100 12V188M12 100H188" stroke="currentColor" stroke-width="0.75"/>
+      <rect x="72" y="72" width="56" height="56" rx="8" stroke="currentColor" stroke-width="1"/>
+    </svg>
+
+    <!-- Trazo arquitectónico en esquina inferior izquierda -->
+    <svg class="hidden lg:block absolute bottom-20 left-6 w-48 h-48 text-forest/[0.05]" viewBox="0 0 180 180" fill="none">
+      <path d="M15 150L75 90L115 130L165 40" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="75" cy="90" r="3.5" fill="currentColor"/>
+      <circle cx="115" cy="130" r="3.5" fill="currentColor"/>
+      <circle cx="165" cy="40" r="3.5" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <!-- Barra de Navegación Sobria -->
+  <header class="bg-card/95 backdrop-blur-sm border-b border-subtle sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+      <button onclick="navigate('catalog')" class="flex items-center gap-2.5 text-left shrink-0">
+        <svg class="w-7 h-7 rounded-md shrink-0" viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#1B4332"/>
+          <path d="M18 44V20l14 14 14-14v24" fill="none" stroke="#FAF9F6" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="32" cy="46" r="3.5" fill="#A7F3D0"/>
+        </svg>
+        <div>
+          <span class="font-editorial text-xl font-medium tracking-tight text-ink block leading-none">Núcleo Digital</span>
+          <span id="virtual-domain-badge" class="text-[10px] font-mono text-mutedInk tracking-tight block mt-0.5">nucleodigital.mx/catalogo</span>
+        </div>
+      </button>
+
+      <nav class="flex items-center gap-1 sm:gap-1.5 overflow-x-auto">
+        <button id="nav-catalog" onclick="navigate('catalog')" class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-ink bg-paper whitespace-nowrap">
+          Catálogo
+        </button>
+        <button id="nav-formats" onclick="navigate('formats')" class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-mutedInk hover:text-ink whitespace-nowrap">
+          Por Tipo de Archivo
+        </button>
+        <button id="nav-access" onclick="navigate('access')" class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-mutedInk hover:text-ink whitespace-nowrap">
+          Mis Accesos
+        </button>
+        <button id="nav-suggestions" onclick="navigate('suggestions')" class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-mutedInk hover:text-ink whitespace-nowrap">
+          Sugerencias
+        </button>
+        <button id="nav-contact" onclick="navigate('contact')" class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-mutedInk hover:text-ink whitespace-nowrap">
+          Contacto
+        </button>
+        <button id="nav-profile" onclick="navigate('profile')" class="hidden px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-mutedInk hover:text-ink whitespace-nowrap">
+          Mi Perfil
+        </button>
+        <button id="nav-admin" onclick="navigate('admin')" class="hidden px-3 py-1.5 text-sm font-medium rounded-md transition-colors text-forest border border-forest/25 bg-forest/5 hover:bg-forest/10 whitespace-nowrap">
+          Centro de Control
+        </button>
+      </nav>
+
+      <div id="auth-header-area" class="flex items-center gap-2 shrink-0">
+        <button onclick="navigate('auth')" class="text-sm font-medium px-3.5 py-1.5 rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+          Iniciar Sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notificación Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-ink text-white text-sm px-4 py-3 rounded-lg border border-stone-700 shadow-md">
+    <p id="toast-message"></p>
+  </div>
+
+  <!-- Contenido Principal -->
+  <main class="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-10">
+
+    <!-- VISTA 1: CATÁLOGO GENERAL -->
+    <section id="view-catalog" class="space-y-8">
+      <div class="bg-card/85 backdrop-blur-sm border border-subtle rounded-xl p-6 sm:p-8 relative overflow-hidden">
+        <div class="max-w-2xl space-y-3 relative z-10">
+          <p class="text-xs uppercase tracking-widest text-forest font-semibold">Sistemas &amp; Plantillas Operativas</p>
+          <h1 class="font-editorial text-3xl sm:text-4xl font-normal text-ink leading-tight">
+            Herramientas listas para estructurar tus finanzas, operaciones, salud y estudio.
+          </h1>
+          <p class="text-mutedInk text-sm sm:text-base leading-relaxed">
+            Cada sistema permanece protegido hasta ingresar su <strong>código individual de activación</strong>. Edita filas y columnas en línea y descarga en <strong>PDF</strong>, <strong>Excel (.xlsx)</strong> o <strong>Word (.doc)</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Filtros y Buscador -->
+      <div class="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center pt-2 border-t border-subtle">
+        <div id="category-filters" class="flex flex-wrap gap-1.5"></div>
+        <div class="relative w-full sm:w-64">
+          <input
+            type="text"
+            id="search-input"
+            oninput="renderCatalog()"
+            placeholder="Buscar sistema o plantilla..."
+            class="w-full px-3 py-1.5 text-sm bg-card border border-subtle rounded-md focus:outline-none focus:border-forest"
+          />
+        </div>
+      </div>
+
+      <!-- Cuadrícula de Productos -->
+      <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- VISTA 1B: SEPARACIÓN POR TIPO DE ARCHIVO (EXCEL VS WORD) -->
+    <section id="view-formats" class="hidden space-y-8">
+      <div class="border-b border-subtle pb-5 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-widest text-forest font-semibold">Clasificación por Formato</p>
+          <h2 class="font-editorial text-2xl sm:text-3xl text-ink mt-1">Plantillas por Tipo de Archivo</h2>
+          <p class="text-sm text-mutedInk mt-1">Explora por separado las hojas de cálculo tipo Excel y los documentos ejecutivos tipo Word.</p>
+        </div>
+        <div class="flex gap-2">
+          <button id="format-tab-excel" onclick="setFormatTab('excel')" class="px-4 py-2 text-sm font-medium rounded-md bg-forest text-white">
+            Tipo Excel (.xlsx / Hojas)
+          </button>
+          <button id="format-tab-word" onclick="setFormatTab('word')" class="px-4 py-2 text-sm font-medium rounded-md bg-card border border-subtle text-ink hover:bg-paper">
+            Tipo Word (.doc / Documentos)
+          </button>
+        </div>
+      </div>
+
+      <div id="format-summary-banner" class="bg-card border border-subtle rounded-lg p-4 text-xs sm:text-sm text-mutedInk"></div>
+
+      <div id="formats-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- VISTA 2: MIS ACCESOS Y DESCARGAS -->
+    <section id="view-access" class="hidden space-y-6">
+      <div class="border-b border-subtle pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-editorial text-2xl sm:text-3xl text-ink">Mis Accesos y Descargas</h2>
+          <p class="text-sm text-mutedInk mt-1">Desbloquea cada producto con su código individual, edita filas y columnas y descarga tus archivos.</p>
+        </div>
+        <div id="account-status-badge"></div>
+      </div>
+
+      <!-- Canje de código específico por producto (válido en ventana de 2 horas) -->
+      <div id="code-redeem-box" class="bg-card border border-subtle rounded-lg p-5 space-y-3">
+        <div>
+          <h3 class="text-sm font-semibold text-ink">Desbloquear producto con código individual</h3>
+          <p class="text-xs text-mutedInk">Todos los productos permanecen bloqueados hasta canjear su clave única. Al validarla, se habilitará <strong>únicamente</strong> ese producto en tu cuenta.</p>
+        </div>
+        <form onsubmit="handleRedeemProductCode(event)" class="flex flex-col sm:flex-row gap-2.5">
+          <input
+            type="text"
+            id="product-access-code-input"
+            required
+            placeholder="Ej. ND-SYSFIN-84K2M9"
+            class="flex-1 px-3 py-2 text-sm uppercase tracking-wider font-mono bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest"
+          />
+          <button type="submit" class="px-4 py-2 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors shrink-0">
+            Desbloquear Producto
+          </button>
+        </form>
+        <p id="redeem-feedback" class="hidden text-xs px-3 py-2 rounded"></p>
+      </div>
+
+      <div id="access-content"></div>
+    </section>
+
+    <!-- VISTA 2B: EDITOR INTERACTIVO DE PLANTILLA + FILAS/COLUMNAS + EXPORTACIÓN -->
+    <section id="view-editor" class="hidden space-y-6">
+      <div class="border-b border-subtle pb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <button onclick="navigate('access')" class="text-xs text-mutedInk hover:text-ink underline underline-offset-4 mb-1 inline-block">
+            &larr; Volver a Mis Accesos
+          </button>
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <h2 id="editor-product-title" class="font-editorial text-2xl sm:text-3xl text-ink">Editor de Plantilla</h2>
+            <span id="editor-format-pill" class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-paper border border-subtle text-forest"></span>
+          </div>
+          <p id="editor-product-subtitle" class="text-xs sm:text-sm text-mutedInk mt-0.5"></p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="addEditorRow()" class="px-3 py-2 text-xs font-medium rounded-md border border-subtle bg-card text-ink hover:bg-paper">
+            + Agregar Fila
+          </button>
+          <button id="editor-add-col-btn" onclick="addEditorColumn()" class="px-3 py-2 text-xs font-medium rounded-md border border-subtle bg-card text-ink hover:bg-paper">
+            + Agregar Columna
+          </button>
+          <button onclick="saveEditorChanges()" class="px-3 py-2 text-xs font-medium rounded-md border border-forest text-forest hover:bg-forest/5">
+            Guardar
+          </button>
+          <button onclick="exportEditorToPDF()" class="px-3.5 py-2 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover">
+            Descargar .PDF
+          </button>
+          <button id="editor-primary-file-btn" onclick="downloadActiveProductPrimaryFile()" class="px-3.5 py-2 text-xs font-medium rounded-md bg-ink text-white hover:opacity-90">
+            Descargar Archivo
+          </button>
+        </div>
+      </div>
+
+      <!-- Banner de advertencia al alcanzar la 10ª columna en archivos Excel -->
+      <div id="excel-column-warning" class="hidden bg-amber-50 border border-amber-300 text-amber-950 rounded-lg px-4 py-3 text-xs sm:text-sm flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="font-bold text-amber-700 text-base">!</span>
+          <span id="excel-column-warning-text" class="font-medium">Cuidado, el límite recomendado de columnas ha sido alcanzado.</span>
+        </div>
+        <button onclick="document.getElementById('excel-column-warning').classList.add('hidden')" class="text-xs text-amber-800 hover:text-amber-950 px-2 py-0.5">
+          Entendido
+        </button>
+      </div>
+
+      <!-- Lienzo dinámico con diseño distinto según la plantilla -->
+      <div id="editor-canvas" class="space-y-5"></div>
+    </section>
+
+    <!-- VISTA: SUGERENCIAS Y SOLICITUDES DE NUEVOS PRODUCTOS -->
+    <section id="view-suggestions" class="hidden max-w-2xl mx-auto space-y-6">
+      <div class="bg-card border border-subtle rounded-lg p-6 sm:p-8 space-y-6">
+        <div class="border-b border-subtle pb-4 space-y-1.5">
+          <p class="text-xs uppercase tracking-widest text-forest font-semibold">Evolución del Catálogo</p>
+          <h2 class="font-editorial text-2xl sm:text-3xl text-ink">Sugerencias y Nuevos Productos</h2>
+          <p class="text-sm text-mutedInk">
+            ¿Necesitas una hoja de cálculo o documento ejecutivo que aún no está en el catálogo? Cuéntanos qué plantilla o sistema te gustaría ver próximamente.
+          </p>
+        </div>
+
+        <form id="suggestions-form" onsubmit="handleSuggestionSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Tu nombre o usuario</label>
+              <input type="text" id="sug-name" required placeholder="Ej. Carlos Mendoza" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Correo electrónico de contacto</label>
+              <input type="email" id="sug-email" required placeholder="tu@correo.com" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Categoría sugerida</label>
+              <select id="sug-category" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest">
+                <option value="Finanzas">Finanzas</option>
+                <option value="Negocios">Negocios</option>
+                <option value="Salud y Rendimiento">Salud y Rendimiento</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Productividad">Productividad</option>
+                <option value="Otra categoría">Otra categoría</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Formato preferido</label>
+              <select id="sug-format" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest">
+                <option value="Excel (.xlsx)">Hoja de cálculo tipo Excel (.xlsx)</option>
+                <option value="Word (.doc)">Documento ejecutivo tipo Word (.doc)</option>
+                <option value="Ambos formatos">Ambos formatos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Título del producto o plantilla solicitada</label>
+            <input type="text" id="sug-title" required placeholder="Ej. Control de Nómina y Comisiones para Equipos Pequeños" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Detalles, columnas o secciones que te gustaría incluir</label>
+            <textarea id="sug-details" rows="4" required placeholder="Describe cómo lo usarías y qué métricas o apartados te serían más útiles..." class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest"></textarea>
+          </div>
+
+          <p id="sug-feedback" class="hidden text-xs px-3 py-2 rounded"></p>
+
+          <button type="submit" class="w-full py-2.5 px-4 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+            Enviar Solicitud a Núcleo Digital
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VISTA: CONTACTO Y SOPORTE TÉCNICO -->
+    <section id="view-contact" class="hidden max-w-2xl mx-auto space-y-6">
+      <div class="bg-card border border-subtle rounded-lg p-6 sm:p-8 space-y-6">
+        <div class="border-b border-subtle pb-4 space-y-1.5">
+          <p class="text-xs uppercase tracking-widest text-forest font-semibold">Atención y Asistencia</p>
+          <h2 class="font-editorial text-2xl sm:text-3xl text-ink">Contacto y Soporte</h2>
+          <p class="text-sm text-mutedInk">
+            ¿Tuviste algún problema con tu cuenta, código de activación o descarga? Escríbenos directamente o envía un ticket al equipo de soporte.
+          </p>
+        </div>
+
+        <div class="bg-paper border border-subtle rounded-md p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-xs text-mutedInk block">Correo oficial de soporte técnico</span>
+            <a href="mailto:soportenucleodigital5@gmail.com" class="text-sm font-mono font-semibold text-forest hover:underline">
+              soportenucleodigital5@gmail.com
+            </a>
+          </div>
+          <button onclick="copySupportEmail()" class="px-3 py-1.5 text-xs font-medium rounded border border-forest text-forest hover:bg-forest hover:text-white transition-colors shrink-0">
+            Copiar correo
+          </button>
+        </div>
+
+        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Nombre completo</label>
+              <input type="text" id="contact-name" required placeholder="Tu nombre" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Tu correo electrónico</label>
+              <input type="email" id="contact-email" required placeholder="tu@correo.com" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Motivo del reporte</label>
+            <select id="contact-topic" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest">
+              <option value="Problema con código de activación">Problema con código de activación</option>
+              <option value="Error al descargar archivo (.xlsx / .doc / .pdf)">Error al descargar archivo (.xlsx / .doc / .pdf)</option>
+              <option value="Acceso a cuenta o Google Authenticator">Acceso a cuenta o Google Authenticator</option>
+              <option value="Liberación de dispositivos">Liberación de dispositivos</option>
+              <option value="Otro problema técnico">Otro problema técnico</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Describe el problema</label>
+            <textarea id="contact-message" rows="4" required placeholder="Explícanos qué ocurrió para ayudarte lo antes posible..." class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest"></textarea>
+          </div>
+
+          <p id="contact-feedback" class="hidden text-xs px-3 py-2 rounded"></p>
+
+          <button type="submit" class="w-full py-2.5 px-4 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+            Enviar Reporte a Soporte
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VISTA 3: MI PERFIL (CON GOOGLE AUTHENTICATOR 2FA Y CAMBIO DE CONTRASEÑA) -->
+    <section id="view-profile" class="hidden max-w-xl mx-auto py-2 space-y-6">
+      <div class="bg-card border border-subtle rounded-lg p-6 sm:p-8 space-y-6">
+        <div class="border-b border-subtle pb-4">
+          <h2 class="font-editorial text-2xl text-ink">Mi Perfil</h2>
+          <p class="text-sm text-mutedInk mt-1">Actualiza tu nombre, apellidos y nombre de usuario en la plataforma.</p>
+        </div>
+
+        <form id="profile-form" onsubmit="handleProfileSave(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Nombre(s)</label>
+              <input type="text" id="profile-firstname" required class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Apellidos</label>
+              <input type="text" id="profile-lastname" required class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Nombre de usuario</label>
+            <div class="flex items-center">
+              <span class="px-3 py-2 text-sm bg-stone-100 border border-r-0 border-subtle rounded-l-md text-mutedInk">@</span>
+              <input type="text" id="profile-username" required placeholder="tu_usuario" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-r-md focus:outline-none focus:border-forest" />
+            </div>
+            <p class="text-[11px] text-mutedInk">Usa letras, números o guiones bajos (mínimo 3 caracteres).</p>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Correo registrado</label>
+            <input type="email" id="profile-email" disabled class="w-full px-3 py-2 text-sm bg-stone-100 border border-subtle rounded-md text-mutedInk cursor-not-allowed" />
+          </div>
+
+          <p id="profile-feedback" class="hidden text-xs px-3 py-2 rounded"></p>
+
+          <button type="submit" class="w-full py-2.5 px-4 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+            Guardar Datos de Perfil
+          </button>
+        </form>
+      </div>
+
+      <!-- Sección de Protección con Google Authenticator (2FA TOTP) -->
+      <div class="bg-card border border-subtle rounded-lg p-6 sm:p-8 space-y-5">
+        <div class="border-b border-subtle pb-4 flex items-start justify-between gap-3">
+          <div>
+            <h3 class="font-editorial text-xl text-ink">Protección con Google Authenticator</h3>
+            <p class="text-xs sm:text-sm text-mutedInk mt-1">Añade verificación en dos pasos (2FA) con códigos temporales de 6 dígitos al iniciar sesión.</p>
+          </div>
+          <span id="ga-status-pill" class="shrink-0 text-[11px] font-medium px-2.5 py-1 rounded-full bg-stone-100 text-mutedInk">Desactivado</span>
+        </div>
+
+        <div id="ga-setup-area" class="space-y-4"></div>
+      </div>
+
+      <!-- Sección de Cambio de Contraseña -->
+      <div class="bg-card border border-subtle rounded-lg p-6 sm:p-8 space-y-5">
+        <div class="border-b border-subtle pb-4">
+          <h3 class="font-editorial text-xl text-ink">Cambiar Contraseña</h3>
+          <p class="text-xs sm:text-sm text-mutedInk mt-1">Por seguridad, verifica tu contraseña actual antes de establecer una nueva.</p>
+        </div>
+
+        <form id="password-change-form" onsubmit="handlePasswordChange(event)" class="space-y-4">
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Contraseña actual</label>
+            <input type="password" id="pwd-current" required placeholder="••••••••" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Nueva contraseña</label>
+              <input type="password" id="pwd-new" required minlength="6" placeholder="Mínimo 6 caracteres" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Confirmar nueva contraseña</label>
+              <input type="password" id="pwd-confirm" required minlength="6" placeholder="Repite la contraseña" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+          </div>
+
+          <p id="password-feedback" class="hidden text-xs px-3 py-2 rounded"></p>
+
+          <button type="submit" class="w-full py-2.5 px-4 text-sm font-medium rounded-md border border-forest text-forest hover:bg-forest hover:text-white transition-colors">
+            Actualizar Contraseña
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VISTA 4: AUTENTICACIÓN (CREAR CUENTA / INICIAR SESIÓN + GOOGLE AUTHENTICATOR) -->
+    <section id="view-auth" class="hidden max-w-md mx-auto py-4">
+      <div class="bg-card border border-subtle rounded-lg p-6 sm:p-8 space-y-6">
+        <div class="space-y-1.5">
+          <h2 id="auth-title" class="font-editorial text-2xl text-ink">Iniciar Sesión</h2>
+          <p id="auth-subtitle" class="text-sm text-mutedInk">Ingresa con tu correo electrónico o nombre de usuario.</p>
+        </div>
+
+        <div id="auth-tabs-row" class="flex border-b border-subtle text-sm">
+          <button id="tab-login" onclick="setAuthMode('login')" class="pb-2.5 pr-4 font-medium border-b-2 border-forest text-ink">
+            Iniciar Sesión
+          </button>
+          <button id="tab-register" onclick="setAuthMode('register')" class="pb-2.5 px-4 font-medium border-b-2 border-transparent text-mutedInk hover:text-ink">
+            Crear Cuenta
+          </button>
+        </div>
+
+        <!-- Paso 1: Formulario estándar de Login / Registro -->
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+          <div id="field-register-extra" class="hidden space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-ink">Nombre(s)</label>
+                <input type="text" id="auth-firstname" placeholder="Ej. Mariana" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-medium text-ink">Apellidos</label>
+                <input type="text" id="auth-lastname" placeholder="Ej. López" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Nombre de usuario</label>
+              <input type="text" id="auth-username" placeholder="Ej. mariana_lpz" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-ink">Correo electrónico</label>
+              <input type="email" id="auth-reg-email" placeholder="tu@correo.com" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            </div>
+          </div>
+
+          <div id="field-login-identifier" class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Correo electrónico o usuario</label>
+            <input type="text" id="auth-email" list="saved-accounts-datalist" placeholder="tu@correo.com o @usuario" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+            <datalist id="saved-accounts-datalist"></datalist>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Contraseña</label>
+            <input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+          </div>
+
+          <!-- Acceso rápido desde la base de datos local de usuarios registrados -->
+          <div id="quick-db-access-box" class="hidden pt-1">
+            <p class="text-[11px] text-mutedInk mb-1.5">Acceso rápido (cuentas guardadas en este navegador):</p>
+            <div id="quick-db-accounts-list" class="flex flex-wrap gap-1.5"></div>
+          </div>
+
+          <p id="auth-error" class="hidden text-xs text-terracotta bg-terraBg px-3 py-2 rounded border border-terracotta/20"></p>
+
+          <button type="submit" id="auth-submit-btn" class="w-full py-2.5 px-4 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+            Entrar a mi cuenta
+          </button>
+        </form>
+
+        <!-- Paso 2: Verificación con Google Authenticator cuando está activado -->
+        <form id="auth-2fa-form" onsubmit="handleVerify2FALogin(event)" class="hidden space-y-4">
+          <div class="bg-paper border border-subtle rounded-md p-3.5 space-y-1">
+            <p class="text-xs font-semibold text-forest">Verificación en 2 pasos requerida</p>
+            <p class="text-xs text-mutedInk">Abre <strong>Google Authenticator</strong> en tu teléfono e ingresa el código de 6 dígitos para <span id="auth-2fa-user-label" class="font-medium text-ink"></span>.</p>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-xs font-medium text-ink">Código de 6 dígitos (Google Authenticator)</label>
+            <input type="text" id="auth-2fa-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required placeholder="000000" class="w-full px-3 py-2.5 text-center text-lg tracking-[0.35em] font-mono bg-paper border border-subtle rounded-md focus:outline-none focus:border-forest" />
+          </div>
+
+          <p id="auth-2fa-error" class="hidden text-xs text-terracotta bg-terraBg px-3 py-2 rounded border border-terracotta/20"></p>
+
+          <div class="flex gap-2">
+            <button type="button" onclick="cancel2FALogin()" class="px-4 py-2.5 text-xs font-medium rounded-md border border-subtle bg-paper text-ink hover:bg-stone-200/60">
+              Volver
+            </button>
+            <button type="submit" class="flex-1 py-2.5 px-4 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+              Verificar e Iniciar Sesión
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- VISTA 5: PANTALLA DE CORTESÍA TRAS CERRAR SESIÓN -->
+    <section id="view-goodbye" class="hidden max-w-lg mx-auto py-8">
+      <div class="bg-card border border-subtle rounded-lg p-8 text-center space-y-5">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-forest"></span>
+        <h2 id="goodbye-title" class="font-editorial text-3xl text-ink">Gracias por tu visita</h2>
+        <p id="goodbye-message" class="text-sm text-mutedInk leading-relaxed">
+          Tu sesión se ha cerrado de forma segura. Esperamos que tus sistemas y plantillas sigan impulsando tus proyectos.
+        </p>
+        <div class="pt-2">
+          <button onclick="navigate('catalog')" class="px-5 py-2.5 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+            Regresar a la pantalla principal
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA 6: CENTRO DE CONTROL (EXCLUSIVO ADMINISTRADOR) -->
+    <section id="view-admin" class="hidden space-y-8">
+      <div class="border-b border-subtle pb-5 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-widest text-forest font-semibold">Administración Privada</p>
+          <h2 class="font-editorial text-2xl sm:text-3xl text-ink mt-1">Centro de Control</h2>
+          <p class="text-sm text-mutedInk mt-1">Base de datos de usuarios, códigos rotativos de 2 horas, dispositivos, sugerencias y soporte.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="admin-subtab-users" onclick="setAdminTab('users')" class="px-3.5 py-1.5 text-sm font-medium rounded-md bg-forest text-white">
+            Base de Datos Usuarios
+          </button>
+          <button id="admin-subtab-codes" onclick="setAdminTab('codes')" class="px-3.5 py-1.5 text-sm font-medium rounded-md bg-card border border-subtle text-ink hover:bg-paper">
+            Códigos por Producto (2h)
+          </button>
+          <button id="admin-subtab-products" onclick="setAdminTab('products')" class="px-3.5 py-1.5 text-sm font-medium rounded-md bg-card border border-subtle text-ink hover:bg-paper">
+            Catálogo y Archivos
+          </button>
+          <button id="admin-subtab-inbox" onclick="setAdminTab('inbox')" class="px-3.5 py-1.5 text-sm font-medium rounded-md bg-card border border-subtle text-ink hover:bg-paper">
+            Buzón (Sugerencias y Soporte)
+          </button>
+        </div>
+      </div>
+
+      <!-- Métricas Rápidas -->
+      <div id="admin-metrics" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
+
+      <!-- Sub-vista A: Base de Datos de Usuarios, Dispositivos y Bloqueos -->
+      <div id="admin-panel-users" class="space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h3 class="text-base font-semibold text-ink">Base de Datos de Cuentas Registradas</h3>
+            <p class="text-xs text-mutedInk">Almacena usuario, correo electrónico, contraseña y estado de seguridad 2FA para acceso rápido.</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="exportUsersDatabaseJSON()" class="px-3 py-1.5 text-xs font-medium rounded-md border border-subtle bg-card text-ink hover:bg-paper">
+              Exportar BD (.json)
+            </button>
+          </div>
+        </div>
+
+        <form onsubmit="adminCreateUser(event)" class="bg-card border border-subtle rounded-lg p-3.5 flex flex-wrap gap-2 items-center">
+          <input type="text" id="new-user-name" required placeholder="Nombre y apellido" class="px-2.5 py-1.5 text-xs bg-paper border border-subtle rounded-md" />
+          <input type="text" id="new-user-username" required placeholder="Usuario" class="px-2.5 py-1.5 text-xs bg-paper border border-subtle rounded-md w-28" />
+          <input type="email" id="new-user-email" required placeholder="Correo" class="px-2.5 py-1.5 text-xs bg-paper border border-subtle rounded-md" />
+          <input type="text" id="new-user-pass" required placeholder="Contraseña" class="px-2.5 py-1.5 text-xs bg-paper border border-subtle rounded-md w-28" />
+          <button type="submit" class="px-3 py-1.5 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover">
+            + Alta Usuario
+          </button>
+        </form>
+
+        <div class="bg-card border border-subtle rounded-lg overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="border-b border-subtle bg-paper text-xs uppercase text-mutedInk">
+                <th class="py-3 px-4 font-medium">Usuario / Correo</th>
+                <th class="py-3 px-4 font-medium">Contraseña</th>
+                <th class="py-3 px-4 font-medium">2FA / Dispositivos</th>
+                <th class="py-3 px-4 font-medium">Productos</th>
+                <th class="py-3 px-4 font-medium">Estado</th>
+                <th class="py-3 px-4 font-medium text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody" class="divide-y divide-stoneLine"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sub-vista B: Códigos Dinámicos por Producto (Rotan cada 2 horas) -->
+      <div id="admin-panel-codes" class="hidden space-y-4">
+        <div class="bg-card border border-subtle rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-semibold text-ink">Claves de Acceso Individuales por Producto</h3>
+            <p class="text-xs text-mutedInk">Cada producto tiene un código único que rota automáticamente cada 2 horas. Al canjearlo, el cliente desbloquea únicamente ese producto.</p>
+          </div>
+          <div class="text-xs font-mono bg-paper border border-subtle px-3 py-1.5 rounded-md text-forest shrink-0">
+            Próxima rotación: <span id="code-rotation-countdown">--:--:--</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between">
+          <div class="relative flex-1 max-w-md">
+            <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-mutedInk">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20 20l-3.5-3.5"></path>
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="admin-codes-search"
+              oninput="renderAdminCodes()"
+              placeholder="Buscar producto, categoría, tipo o código..."
+              class="w-full pl-9 pr-8 py-2 text-sm bg-card border border-subtle rounded-md focus:outline-none focus:border-forest"
+            />
+            <button
+              type="button"
+              id="admin-codes-clear"
+              onclick="clearAdminCodesSearch()"
+              class="hidden absolute inset-y-0 right-2.5 flex items-center text-mutedInk hover:text-ink text-sm"
+              title="Limpiar búsqueda"
+            >&times;</button>
+          </div>
+          <span id="admin-codes-count" class="text-xs text-mutedInk"></span>
+        </div>
+
+        <div class="bg-card border border-subtle rounded-lg overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="border-b border-subtle bg-paper text-xs uppercase text-mutedInk">
+                <th class="py-3 px-4 font-medium">Producto</th>
+                <th class="py-3 px-4 font-medium">Categoría / Formato</th>
+                <th class="py-3 px-4 font-medium">Código Activo (2h)</th>
+                <th class="py-3 px-4 font-medium text-right">Copiar</th>
+              </tr>
+            </thead>
+            <tbody id="admin-codes-tbody" class="divide-y divide-stoneLine"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sub-vista C: Gestión de Catálogo -->
+      <div id="admin-panel-products" class="hidden space-y-6">
+        <div class="bg-card border border-subtle rounded-lg p-5 space-y-4">
+          <h3 class="text-base font-semibold text-ink">Agregar Nuevo Sistema / Plantilla</h3>
+          <form onsubmit="adminAddProduct(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <input type="text" id="prod-title" required placeholder="Título del sistema" class="px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+            <input type="text" id="prod-category" required placeholder="Categoría (ej. Finanzas)" class="px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+            <select id="prod-file-type" class="px-3 py-2 text-sm bg-paper border border-subtle rounded-md">
+              <option value="excel">Formato Principal: Excel (.xlsx)</option>
+              <option value="word">Formato Principal: Word (.doc)</option>
+            </select>
+            <input type="number" id="prod-price" required min="0" placeholder="Precio MXN (ej. 290)" class="px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+            <input type="text" id="prod-desc" required placeholder="Descripción breve de lo que incluye" class="sm:col-span-2 lg:col-span-3 px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+            <button type="submit" class="px-4 py-2 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover">
+              Publicar en Catálogo
+            </button>
+          </form>
+        </div>
+
+        <div class="bg-card border border-subtle rounded-lg overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="border-b border-subtle bg-paper text-xs uppercase text-mutedInk">
+                <th class="py-3 px-4 font-medium">Sistema</th>
+                <th class="py-3 px-4 font-medium">Categoría</th>
+                <th class="py-3 px-4 font-medium">Tipo Archivo</th>
+                <th class="py-3 px-4 font-medium">Precio (MXN)</th>
+                <th class="py-3 px-4 font-medium text-right">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-tbody" class="divide-y divide-stoneLine"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sub-vista D: Buzón de Sugerencias y Tickets de Soporte -->
+      <div id="admin-panel-inbox" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-card border border-subtle rounded-lg p-5 space-y-3">
+            <h3 class="text-base font-semibold text-ink">Sugerencias de Nuevos Productos</h3>
+            <div id="admin-suggestions-list" class="space-y-3"></div>
+          </div>
+          <div class="bg-card border border-subtle rounded-lg p-5 space-y-3">
+            <h3 class="text-base font-semibold text-ink">Reportes de Soporte (<span class="font-mono text-xs">soportenucleodigital5@gmail.com</span>)</h3>
+            <div id="admin-tickets-list" class="space-y-3"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal de Vista Previa del Sistema / Canje Rápido de Código -->
+  <div id="product-modal" class="fixed inset-0 z-40 hidden bg-ink/40 flex items-center justify-center p-4">
+    <div class="bg-card border border-subtle rounded-lg max-w-lg w-full p-6 space-y-5">
+      <div class="flex justify-between items-start gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="modal-category" class="text-xs uppercase tracking-wider text-forest font-semibold"></span>
+            <span id="modal-filetype-badge" class="text-[10px] font-medium px-2 py-0.5 rounded bg-paper border border-subtle text-mutedInk"></span>
+          </div>
+          <h3 id="modal-title" class="font-editorial text-2xl text-ink mt-1"></h3>
+        </div>
+        <button onclick="closeModal()" class="text-mutedInk hover:text-ink text-lg leading-none px-2 py-1">&times;</button>
+      </div>
+      <p id="modal-desc" class="text-sm text-mutedInk leading-relaxed"></p>
+      <div class="bg-paper border border-subtle rounded-md p-3.5 space-y-2">
+        <p class="text-xs font-semibold uppercase tracking-wider text-ink">Estructura incluida:</p>
+        <ul id="modal-features" class="text-xs text-mutedInk space-y-1 list-disc list-inside"></ul>
+      </div>
+
+      <div id="modal-unlock-box" class="hidden bg-paper border border-subtle rounded-md p-3.5 space-y-2.5">
+        <p class="text-xs font-semibold text-ink">Producto bloqueado · Ingresa su código individual</p>
+        <form onsubmit="handleModalCodeUnlock(event)" class="flex gap-2">
+          <input type="text" id="modal-code-input" required placeholder="ND-XXXXXX-XXXXXX" class="flex-1 px-3 py-1.5 text-xs uppercase font-mono bg-card border border-subtle rounded focus:outline-none focus:border-forest" />
+          <button type="submit" class="px-3.5 py-1.5 text-xs font-medium rounded bg-forest text-white hover:bg-forestHover">
+            Desbloquear
+          </button>
+        </form>
+        <p id="modal-code-feedback" class="hidden text-[11px]"></p>
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-subtle">
+        <div>
+          <span class="text-xs text-mutedInk block">Licencia individual</span>
+          <span id="modal-price" class="text-lg font-semibold text-ink"></span>
+        </div>
+        <div id="modal-action-area"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de Página con Soporte y Control Discreto de Música Ambiental -->
+  <footer class="relative z-10 border-t border-subtle bg-card/95 backdrop-blur-sm mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-mutedInk">
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+        <p>&copy; 2026 Núcleo Digital (<span class="font-mono">nucleodigital.mx</span>).</p>
+        <span>&middot;</span>
+        <a href="mailto:soportenucleodigital5@gmail.com" class="hover:text-forest underline underline-offset-2">
+          soportenucleodigital5@gmail.com
+        </a>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <button id="ambient-toggle-btn" onclick="toggleAmbientMusic()" class="px-3 py-1 rounded-md border border-subtle bg-paper text-ink hover:bg-stone-200/60 transition-colors font-medium">
+          Audio ambiental: Apagado
+        </button>
+        <span id="ambient-track-label" class="text-[11px] text-mutedInk">Pista 1/6 · Rota cada 10m</span>
+        <button onclick="cycleAmbientTrack()" class="px-2 py-1 rounded border border-subtle hover:text-ink" title="Cambiar pista ahora">
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const SUPPORT_EMAIL = 'soportenucleodigital5@gmail.com';
+    const EXCEL_RECOMMENDED_COLUMNS = 10;
+    const EXCEL_MAX_COLUMNS = 12;
+
+    // --- CATÁLOGO CON SEPARACIÓN DE TIPO DE ARCHIVO (EXCEL VS WORD) ---
+    const DEFAULT_PRODUCTS = [
+      // FINANZAS
+      {
+        id: 'sys-finance',
+        title: 'Control de Presupuesto y Flujo de Caja',
+        category: 'Finanzas',
+        fileType: 'excel',
+        price: 290,
+        templateKey: 'finance',
+        description: 'Sistema integral de seguimiento mensual y anual para ingresos, gastos fijos, variables y tasa de ahorro con resumen automático.',
+        features: ['Hoja de cálculo tipo Excel (.xlsx) con filas y columnas dinámicas', 'Exportación directa a .PDF y .xlsx', 'Bloqueado hasta validar su código individual']
+      },
+      {
+        id: 'sys-debt-payoff',
+        title: 'Plan de Liquidación de Deudas y Tasas',
+        category: 'Finanzas',
+        fileType: 'excel',
+        price: 250,
+        templateKey: 'finance',
+        description: 'Compara estrategias bola de nieve y avalancha para liquidar saldos con intereses y proyectar fechas libres de deuda.',
+        features: ['Hoja tipo Excel (.xlsx) editable con filas y columnas', 'Descarga en .xlsx y .PDF lista para usar', 'Activación mediante código individual']
+      },
+      {
+        id: 'sys-emergency-fund',
+        title: 'Fondo de Emergencia y Metas de Ahorro',
+        category: 'Finanzas',
+        fileType: 'excel',
+        price: 210,
+        templateKey: 'finance',
+        description: 'Calcula tu colchón de seguridad de 3 a 6 meses y monitorea aportes periódicos hacia metas financieras específicas.',
+        features: ['Plantilla tipo Excel (.xlsx) con columnas personalizables', 'Exportación en .PDF y .xlsx', 'Requiere código único para desbloquear']
+      },
+      {
+        id: 'sys-tax-ledger',
+        title: 'Bitácora de Facturación, Deducciones e IVA',
+        category: 'Finanzas',
+        fileType: 'excel',
+        price: 340,
+        templateKey: 'finance',
+        description: 'Organiza ingresos facturados, gastos deducibles y retenciones para preparar cierres mensuales sin contratiempos.',
+        features: ['Libro tipo Excel (.xlsx) con totales automáticos', 'Exportación inmediata en .xlsx y .PDF', 'Protegido por clave individual']
+      },
+
+      // SALUD Y RENDIMIENTO
+      {
+        id: 'sys-macros',
+        title: 'Tracker de Macros y Composición Corporal',
+        category: 'Salud y Rendimiento',
+        fileType: 'excel',
+        price: 240,
+        templateKey: 'macros',
+        description: 'Calculadora y registro diario en gramos para controlar proteínas, carbohidratos, grasas, calorías totales y evolución semanal.',
+        features: ['Hoja tipo Excel (.xlsx) con suma en tiempo real', 'Permite agregar filas y columnas personalizadas', 'Descarga en .xlsx y .PDF']
+      },
+      {
+        id: 'sys-workout-log',
+        title: 'Bitácora de Fuerza, Cargas y Progresión',
+        category: 'Salud y Rendimiento',
+        fileType: 'excel',
+        price: 260,
+        templateKey: 'macros',
+        description: 'Registra ejercicios, series, repeticiones, RPE y cargas en kilogramos para aplicar sobrecarga progresiva semana a semana.',
+        features: ['Hoja tipo Excel (.xlsx) de entrenamiento', 'Exportación a .PDF y .xlsx', 'Desbloqueo individual por código']
+      },
+      {
+        id: 'sys-fight-camp',
+        title: 'Protocolo Escrito de Campamento y Peso Competitivo',
+        category: 'Salud y Rendimiento',
+        fileType: 'word',
+        price: 280,
+        templateKey: 'word_doc',
+        description: 'Documento estructurado tipo Word (.doc) para planificar fases de campamento, hidratación, corte gradual y estrategia de combate.',
+        features: ['Documento ejecutivo tipo Word (.doc) y PDF', 'Secciones editables con filas y columnas', 'Bloqueado hasta ingresar clave individual']
+      },
+      {
+        id: 'sys-recovery-sleep',
+        title: 'Matriz de Recuperación, Sueño y Energía',
+        category: 'Salud y Rendimiento',
+        fileType: 'excel',
+        price: 195,
+        templateKey: 'macros',
+        description: 'Evalúa horas de sueño, calidad de descanso, fatiga percibida y disponibilidad física diaria para entrenar con inteligencia.',
+        features: ['Hoja tipo Excel (.xlsx) con filas y columnas ampliables', 'Exportación en .xlsx y .PDF', 'Acceso individual por código']
+      },
+
+      // NEGOCIOS
+      {
+        id: 'sys-ops',
+        title: 'Tablero Operativo para Emprendedores',
+        category: 'Negocios',
+        fileType: 'excel',
+        price: 350,
+        templateKey: 'ops',
+        description: 'Pipeline comercial y control de KPIs mensuales para gestionar prospectos, probabilidad de cierre y facturación proyectada.',
+        features: ['Hoja tipo Excel (.xlsx) editable por filas y columnas', 'Descarga directa en .xlsx y .PDF', 'Clave única de activación']
+      },
+      {
+        id: 'sys-quotes',
+        title: 'Propuesta Comercial y Cotización Ejecutiva',
+        category: 'Negocios',
+        fileType: 'word',
+        price: 310,
+        templateKey: 'word_doc',
+        description: 'Documento formal tipo Word (.doc) para presentar propuestas de servicios, alcance, entregables, términos y cotización desglosada.',
+        features: ['Formato documento tipo Word (.doc) listo para cliente', 'Exportación a .doc y .PDF', 'Desbloqueo exclusivo con su código']
+      },
+      {
+        id: 'sys-service-contract',
+        title: 'Contrato Marco de Prestación de Servicios y NDA',
+        category: 'Negocios',
+        fileType: 'word',
+        price: 360,
+        templateKey: 'word_doc',
+        description: 'Plantilla documental tipo Word (.doc) con cláusulas de confidencialidad, propiedad intelectual, entregables y condiciones de pago.',
+        features: ['Documento legal-operativo tipo Word (.doc)', 'Exportación a .doc y .PDF', 'Requiere código individual']
+      },
+      {
+        id: 'sys-inventory-unit',
+        title: 'Control de Inventario y Costo Unitario',
+        category: 'Negocios',
+        fileType: 'excel',
+        price: 320,
+        templateKey: 'quotes',
+        description: 'Monitorea entradas, salidas, stock disponible, punto de reorden y costo promedio por unidad para micro-negocios y reventa.',
+        features: ['Hoja tipo Excel (.xlsx) con columnas ampliables', 'Descarga en .xlsx y .PDF', 'Activación mediante código individual']
+      },
+
+      // MARKETING
+      {
+        id: 'sys-content',
+        title: 'Calendario de Contenido y Embudo',
+        category: 'Marketing',
+        fileType: 'excel',
+        price: 220,
+        templateKey: 'content',
+        description: 'Planificador editorial multicanal diseñado para organizar fechas de publicación, canales, métricas y estado de producción.',
+        features: ['Hoja tipo Excel (.xlsx) con filas y columnas dinámicas', 'Exportación en .xlsx y .PDF', 'Bloqueado hasta canjear su clave']
+      },
+      {
+        id: 'sys-brief-word',
+        title: 'Brief Creativo y Guion Maestro de Campaña',
+        category: 'Marketing',
+        fileType: 'word',
+        price: 245,
+        templateKey: 'word_doc',
+        description: 'Documento estructurado tipo Word (.doc) para definir avatar, propuesta de valor, mensajes clave, guiones y llamados a la acción.',
+        features: ['Documento tipo Word (.doc) con bloques editables', 'Descarga en .doc y .PDF', 'Protegido por clave individual']
+      },
+      {
+        id: 'sys-hook-library',
+        title: 'Manual de Ganchos, Guiones y Objeciones',
+        category: 'Marketing',
+        fileType: 'word',
+        price: 195,
+        templateKey: 'word_doc',
+        description: 'Guía documental tipo Word (.doc) para redactar aperturas de alta retención y respuestas comerciales ante objeciones.',
+        features: ['Documento tipo Word (.doc) personalizable', 'Descarga en .doc y .PDF', 'Requiere código individual']
+      },
+      {
+        id: 'sys-ads-roas',
+        title: 'Monitor de Inversión Publicitaria y ROAS',
+        category: 'Marketing',
+        fileType: 'excel',
+        price: 275,
+        templateKey: 'content',
+        description: 'Compara inversión en anuncios, clics, conversiones e ingresos generados para detectar qué campañas escalar y cuáles pausar.',
+        features: ['Hoja tipo Excel (.xlsx) con cálculo de retorno', 'Agregado dinámico de filas y columnas', 'Descarga en .xlsx y .PDF']
+      },
+
+      // PRODUCTIVIDAD
+      {
+        id: 'sys-study',
+        title: 'Sistema de Estudio y Repetición Espaciada',
+        category: 'Productividad',
+        fileType: 'excel',
+        price: 190,
+        templateKey: 'study',
+        description: 'Estructura académica para organizar materias, nivel de dominio por tema, intervalos de repaso y horas efectivas de estudio.',
+        features: ['Hoja tipo Excel (.xlsx) con filas y columnas dinámicas', 'Descarga en .xlsx y .PDF', 'Bloqueado hasta validar su código']
+      },
+      {
+        id: 'sys-sop-manual',
+        title: 'Manual de Procedimientos Operativos (SOP)',
+        category: 'Productividad',
+        fileType: 'word',
+        price: 230,
+        templateKey: 'word_doc',
+        description: 'Documento estandarizado tipo Word (.doc) para documentar procesos paso a paso, responsables, herramientas y criterios de calidad.',
+        features: ['Documento tipo Word (.doc) listo para equipos', 'Exportación a .doc y .PDF', 'Activación individual por código']
+      },
+      {
+        id: 'sys-exam-prep',
+        title: 'Cronograma de Exámenes y Entregables',
+        category: 'Productividad',
+        fileType: 'excel',
+        price: 175,
+        templateKey: 'study',
+        description: 'Centraliza fechas de parciales, proyectos en equipo, porcentajes de calificación y temas pendientes por asignatura.',
+        features: ['Hoja tipo Excel (.xlsx) editable en línea', 'Exportación en .xlsx y .PDF', 'Requiere clave individual']
+      },
+      {
+        id: 'sys-habit-system',
+        title: 'Sistema de Hábitos Diarios y Constancia',
+        category: 'Productividad',
+        fileType: 'excel',
+        price: 190,
+        templateKey: 'study',
+        description: 'Mide constancia diaria en hábitos clave de disciplina, lectura, entrenamiento y orden personal sin métricas confusas.',
+        features: ['Hoja tipo Excel (.xlsx) con columnas ampliables', 'Exportación en .xlsx y .PDF', 'Bloqueado hasta canjear su clave']
+      }
+    ];
+
+    const DEFAULT_USERS = [
+      {
+        id: 'usr-admin',
+        firstName: 'Administrador',
+        lastName: 'Principal',
+        name: 'Administrador Principal',
+        username: 'admin_nucleo',
+        email: 'admin@sistema.mx',
+        password: 'admin123',
+        role: 'admin',
+        status: 'active',
+        twoFactorEnabled: false,
+        twoFactorSecret: '',
+        maxDevices: 2,
+        activeDevices: [],
+        unlockedIds: DEFAULT_PRODUCTS.map(p => p.id)
+      },
+      {
+        id: 'usr-client-1',
+        firstName: 'Carlos',
+        lastName: 'Mendoza',
+        name: 'Carlos Mendoza',
+        username: 'carlos_mza',
+        email: 'carlos@ejemplo.mx',
+        password: 'cliente123',
+        role: 'user',
+        status: 'active',
+        twoFactorEnabled: false,
+        twoFactorSecret: '',
+        maxDevices: 2,
+        activeDevices: [],
+        unlockedIds: []
+      }
+    ];
+
+    // --- BASE DE DATOS LOCAL (IndexedDB + localStorage sincronizados) ---
+    let products = JSON.parse(localStorage.getItem('nd_products_v4')) || DEFAULT_PRODUCTS;
+    let users = JSON.parse(localStorage.getItem('nd_users_v4')) || DEFAULT_USERS;
+    let suggestionsDB = JSON.parse(localStorage.getItem('nd_suggestions_v4')) || [];
+    let supportTicketsDB = JSON.parse(localStorage.getItem('nd_tickets_v4')) || [];
+    let currentUserId = localStorage.getItem('nd_session_uid_v4') || null;
+    let currentDeviceId = localStorage.getItem('nd_device_id_v4');
+    if (!currentDeviceId) {
+      currentDeviceId = 'dev-' + Math.random().toString(36).slice(2, 10) + '-' + Date.now().toString(36);
+      localStorage.setItem('nd_device_id_v4', currentDeviceId);
+    }
+
+    let customEdits = JSON.parse(localStorage.getItem('nd_custom_edits_v4')) || {};
+    let activeEditorProductId = null;
+    let activeModalProductId = null;
+    let selectedCategory = 'Todos';
+    let selectedFormatTab = 'excel';
+    let authMode = 'login';
+    let pending2FAUserId = null;
+    let pendingGASecret = null;
+    let lastGoodbyeInfo = {
+      title: 'Gracias por tu visita',
+      message: 'Tu sesión se ha cerrado de forma segura.'
+    };
+
+    // Sincronización con IndexedDB como base de datos persistente del navegador
+    function syncUsersToIndexedDB() {
+      if (!window.indexedDB) return;
+      try {
+        const req = indexedDB.open('NucleoDigitalDB', 1);
+        req.onupgradeneeded = function (e) {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('users')) {
+            db.createObjectStore('users', { keyPath: 'id' });
+          }
+        };
+        req.onsuccess = function (e) {
+          const db = e.target.result;
+          const tx = db.transaction('users', 'readwrite');
+          const store = tx.objectStore('users');
+          store.clear();
+          users.forEach(u => {
+            store.put({
+              id: u.id,
+              username: u.username,
+              email: u.email,
+              password: u.password,
+              name: u.name,
+              role: u.role,
+              status: u.status,
+              twoFactorEnabled: !!u.twoFactorEnabled,
+              twoFactorSecret: u.twoFactorSecret || '',
+              unlockedIds: u.unlockedIds || []
+            });
+          });
+        };
+      } catch (err) {}
+    }
+
+    function saveState() {
+      localStorage.setItem('nd_products_v4', JSON.stringify(products));
+      localStorage.setItem('nd_users_v4', JSON.stringify(users));
+      localStorage.setItem('nd_suggestions_v4', JSON.stringify(suggestionsDB));
+      localStorage.setItem('nd_tickets_v4', JSON.stringify(supportTicketsDB));
+      localStorage.setItem('nd_custom_edits_v4', JSON.stringify(customEdits));
+      if (currentUserId) {
+        localStorage.setItem('nd_session_uid_v4', currentUserId);
+      } else {
+        localStorage.removeItem('nd_session_uid_v4');
+      }
+      syncUsersToIndexedDB();
+    }
+
+    function getCurrentUser() {
+      return users.find(u => u.id === currentUserId) || null;
+    }
+
+    function isProductUnlockedForUser(user, productId) {
+      if (!user || user.status === 'blocked') return false;
+      if (user.role === 'admin') return true;
+      return Array.isArray(user.unlockedIds) && user.unlockedIds.includes(productId);
+    }
+
+    function getDeviceLabel() {
+      const ua = navigator.userAgent;
+      const platform = /iPhone|iPad|iPod/i.test(ua) ? 'iOS' : /Android/i.test(ua) ? 'Android' : /Mac/i.test(ua) ? 'macOS' : /Win/i.test(ua) ? 'Windows' : 'Navegador';
+      const browser = /Edg/i.test(ua) ? 'Edge' : /Chrome/i.test(ua) ? 'Chrome' : /Safari/i.test(ua) ? 'Safari' : 'Web';
+      return `${platform} · ${browser}`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 3600);
+    }
+
+    // --- DIRECCIÓN WEB VIRTUAL DISTINTA POR SECCIÓN ---
+    const VIEW_ROUTES = {
+      catalog: '/catalogo',
+      formats: '/archivos-excel-word',
+      access: '/boveda-accesos',
+      editor: '/estudio-edicion',
+      suggestions: '/sugerencias-productos',
+      contact: '/contacto-soporte',
+      profile: '/cuenta-perfil',
+      auth: '/acceso-seguro',
+      goodbye: '/sesion-cerrada',
+      admin: '/panel-maestro-nd'
+    };
+
+    function syncVirtualUrl(view) {
+      const route = VIEW_ROUTES[view] || '/catalogo';
+      const badge = document.getElementById('virtual-domain-badge');
+      if (badge) {
+        badge.textContent = `nucleodigital.mx${route}`;
+      }
+      try {
+        history.replaceState(null, '', `#${route}`);
+      } catch (err) {}
+    }
+
+    // --- GOOGLE AUTHENTICATOR (RFC 6238 TOTP REAL EN BASE32 CON WEB CRYPTO API) ---
+    function generateBase32Secret(length = 16) {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+      const bytes = new Uint8Array(length);
+      crypto.getRandomValues(bytes);
+      let out = '';
+      for (let i = 0; i < length; i++) {
+        out += alphabet[bytes[i] % 32];
+      }
+      return out;
+    }
+
+    function base32ToBytes(base32) {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+      const cleaned = base32.toUpperCase().replace(/[^A-Z2-7]/g, '');
+      let bits = 0;
+      let value = 0;
+      const out = [];
+      for (let i = 0; i < cleaned.length; i++) {
+        const idx = alphabet.indexOf(cleaned[i]);
+        if (idx === -1) continue;
+        value = (value << 5) | idx;
+        bits += 5;
+        if (bits >= 8) {
+          out.push((value >>> (bits - 8)) & 255);
+          bits -= 8;
+        }
+      }
+      return new Uint8Array(out);
+    }
+
+    async function computeTOTP(secretBase32, windowOffset = 0) {
+      const keyBytes = base32ToBytes(secretBase32);
+      const counter = Math.floor(Date.now() / 1000 / 30) + windowOffset;
+      const counterBuf = new ArrayBuffer(8);
+      const view = new DataView(counterBuf);
+      view.setUint32(0, Math.floor(counter / 0x100000000));
+      view.setUint32(4, counter >>> 0);
+
+      const cryptoKey = await crypto.subtle.importKey(
+        'raw',
+        keyBytes,
+        { name: 'HMAC', hash: 'SHA-1' },
+        false,
+        ['sign']
+      );
+      const sig = await crypto.subtle.sign('HMAC', cryptoKey, counterBuf);
+      const hmac = new Uint8Array(sig);
+      const offset = hmac[hmac.length - 1] & 0x0f;
+      const binary =
+        ((hmac[offset] & 0x7f) << 24) |
+        ((hmac[offset + 1] & 0xff) << 16) |
+        ((hmac[offset + 2] & 0xff) << 8) |
+        (hmac[offset + 3] & 0xff);
+      return String(binary % 1000000).padStart(6, '0');
+    }
+
+    async function verifyTOTPCode(secretBase32, inputCode) {
+      const clean = String(inputCode || '').replace(/\s+/g, '');
+      if (!/^\d{6}$/.test(clean) || !secretBase32) return false;
+      for (const offset of [-1, 0, 1]) {
+        const expected = await computeTOTP(secretBase32, offset);
+        if (expected === clean) return true;
+      }
+      return false;
+    }
+
+    function buildOtpAuthUri(user, secret) {
+      const issuer = encodeURIComponent('Nucleo Digital');
+      const account = encodeURIComponent(user.email || user.username);
+      return `otpauth://totp/${issuer}:${account}?secret=${secret}&issuer=${issuer}&algorithm=SHA1&digits=6&period=30`;
+    }
+
+    // --- ENVÍO DE EMAIL DE CONFIRMACIÓN AL REGISTRAR CUENTA ---
+    function sendRegistrationConfirmationEmail(newUser) {
+      const subject = encodeURIComponent('Confirmación de registro · Núcleo Digital (nucleodigital.mx)');
+      const body = encodeURIComponent(
+        `Hola ${newUser.firstName},
+
+` +
+        `Tu cuenta en Núcleo Digital se ha creado correctamente.
+
+` +
+        `• Usuario: @${newUser.username}
+` +
+        `• Correo electrónico: ${newUser.email}
+` +
+        `• Fecha de registro: ${new Date().toLocaleString('es-MX')}
+
+` +
+        `Si necesitas asistencia, escríbenos a ${SUPPORT_EMAIL}.
+
+` +
+        `Atentamente,
+Equipo Núcleo Digital`
+      );
+      // Dispara el cliente de correo hacia la dirección registrada como confirmación directa
+      try {
+        const mailLink = document.createElement('a');
+        mailLink.href = `mailto:${encodeURIComponent(newUser.email)}?cc=${encodeURIComponent(SUPPORT_EMAIL)}&subject=${subject}&body=${body}`;
+        mailLink.style.display = 'none';
+        document.body.appendChild(mailLink);
+        mailLink.click();
+        document.body.removeChild(mailLink);
+      } catch (err) {}
+    }
+
+    // --- CÓDIGOS DINÁMICOS INDIVIDUALES POR PRODUCTO (ROTAN CADA 2 HORAS) ---
+    const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
+
+    function getTwoHourWindowIndex(offsetWindows = 0) {
+      return Math.floor(Date.now() / TWO_HOURS_MS) + offsetWindows;
+    }
+
+    function generateProductCode(productId, windowIndex = getTwoHourWindowIndex()) {
+      const cleanId = productId.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6).padEnd(4, 'X');
+      const raw = `${productId}::${windowIndex}::ND2026`;
+      let hash = 2166136261;
+      for (let i = 0; i < raw.length; i++) {
+        hash ^= raw.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      const suffix = (hash >>> 0).toString(36).toUpperCase().padStart(6, '0').slice(0, 6);
+      return `ND-${cleanId}-${suffix}`;
+    }
+
+    function findProductByCurrentCode(codeInput) {
+      const normalized = codeInput.trim().toUpperCase();
+      if (!normalized) return null;
+      const winNow = getTwoHourWindowIndex(0);
+      return products.find(p => generateProductCode(p.id, winNow) === normalized) || null;
+    }
+
+    function updateTwoHourCountdown() {
+      const el = document.getElementById('code-rotation-countdown');
+      if (!el) return;
+      const remMs = TWO_HOURS_MS - (Date.now() % TWO_HOURS_MS);
+      const totalSec = Math.max(0, Math.floor(remMs / 1000));
+      const hrs = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(totalSec % 60).padStart(2, '0');
+      el.textContent = `${hrs}:${mins}:${secs}`;
+    }
+
+    // --- NAVEGACIÓN ---
+    function navigate(view) {
+      const user = getCurrentUser();
+
+      if (user && !isCurrentDeviceAuthorized(user)) {
+        currentUserId = null;
+        saveState();
+        showToast('Límite de dispositivos simultáneos alcanzado. Inicia sesión nuevamente.');
+        view = 'auth';
+      }
+
+      if (view === 'admin' && (!user || user.role !== 'admin')) {
+        view = 'auth';
+        setAuthMode('login');
+      }
+      if (view === 'profile' && !user) {
+        view = 'auth';
+        setAuthMode('login');
+      }
+      if (view === 'editor') {
+        if (!user) {
+          view = 'auth';
+          setAuthMode('login');
+        } else if (user.status === 'blocked') {
+          view = 'access';
+        } else {
+          const prod = products.find(p => p.id === activeEditorProductId);
+          if (!prod || !isProductUnlockedForUser(user, prod.id)) {
+            view = 'access';
+            showToast('Este producto está bloqueado. Ingresa su código individual para desbloquearlo.');
+          }
+        }
+      }
+
+      ['catalog', 'formats', 'access', 'editor', 'suggestions', 'contact', 'profile', 'auth', 'goodbye', 'admin'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+        const navBtn = document.getElementById(`nav-${v}`);
+        if (navBtn) {
+          navBtn.classList.remove('bg-paper', 'text-ink');
+          navBtn.classList.add('text-mutedInk');
+        }
+      });
+
+      document.getElementById(`view-${view}`).classList.remove('hidden');
+      const activeNav = document.getElementById(`nav-${view}`);
+      if (activeNav) {
+        activeNav.classList.add('bg-paper', 'text-ink');
+        activeNav.classList.remove('text-mutedInk');
+      }
+
+      syncVirtualUrl(view);
+      updateHeader();
+      if (view === 'catalog') renderCatalog();
+      if (view === 'formats') renderFormatsView();
+      if (view === 'access') renderAccess();
+      if (view === 'editor') renderEditor();
+      if (view === 'suggestions') prefillUserForms();
+      if (view === 'contact') prefillUserForms();
+      if (view === 'profile') renderProfile();
+      if (view === 'auth') renderQuickDatabaseAccess();
+      if (view === 'admin') renderAdmin();
+      if (view === 'goodbye') {
+        document.getElementById('goodbye-title').textContent = lastGoodbyeInfo.title;
+        document.getElementById('goodbye-message').textContent = lastGoodbyeInfo.message;
+      }
+    }
+
+    function updateHeader() {
+      const user = getCurrentUser();
+      const adminNav = document.getElementById('nav-admin');
+      const profileNav = document.getElementById('nav-profile');
+      const authArea = document.getElementById('auth-header-area');
+
+      if (user && user.role === 'admin') {
+        adminNav.classList.remove('hidden');
+      } else {
+        adminNav.classList.add('hidden');
+      }
+
+      if (user) {
+        profileNav.classList.remove('hidden');
+        const displayHandle = user.username ? `@${user.username}` : user.name;
+        authArea.innerHTML = `
+          <span class="hidden md:inline text-xs text-mutedInk">${displayHandle}</span>
+          <button onclick="logout()" class="text-xs font-medium px-3 py-1.5 rounded-md border border-subtle bg-paper text-ink hover:bg-stone-200/60 transition-colors">
+            Cerrar Sesión
+          </button>
+        `;
+      } else {
+        profileNav.classList.add('hidden');
+        authArea.innerHTML = `
+          <button onclick="navigate('auth')" class="text-sm font-medium px-3.5 py-1.5 rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+            Iniciar Sesión
+          </button>
+        `;
+      }
+    }
+
+    // --- CONTROL DE LÍMITE DE DISPOSITIVOS SIMULTÁNEOS ---
+    function isCurrentDeviceAuthorized(user) {
+      if (!user) return false;
+      if (!Array.isArray(user.activeDevices)) user.activeDevices = [];
+      return user.activeDevices.some(d => d.deviceId === currentDeviceId);
+    }
+
+    function registerDeviceSession(user) {
+      if (!Array.isArray(user.activeDevices)) user.activeDevices = [];
+      const limit = user.maxDevices || 2;
+      const existingIndex = user.activeDevices.findIndex(d => d.deviceId === currentDeviceId);
+      const nowIso = new Date().toISOString();
+
+      if (existingIndex !== -1) {
+        user.activeDevices[existingIndex].lastSeen = nowIso;
+        user.activeDevices[existingIndex].label = getDeviceLabel();
+        return { ok: true };
+      }
+
+      if (user.activeDevices.length >= limit) {
+        return { ok: false, limit };
+      }
+
+      user.activeDevices.push({
+        deviceId: currentDeviceId,
+        label: getDeviceLabel(),
+        lastSeen: nowIso
+      });
+      return { ok: true };
+    }
+
+    // --- ACCESO RÁPIDO DESDE BASE DE DATOS DE USUARIOS ---
+    function renderQuickDatabaseAccess() {
+      const datalist = document.getElementById('saved-accounts-datalist');
+      const quickBox = document.getElementById('quick-db-access-box');
+      const listEl = document.getElementById('quick-db-accounts-list');
+      if (!datalist || !quickBox || !listEl) return;
+
+      datalist.innerHTML = users.map(u => `<option value="${escapeAttr(u.email)}">@${escapeAttr(u.username)} · ${escapeAttr(u.name)}</option>`).join('');
+
+      const clientAccounts = users.filter(u => u.role !== 'admin');
+      if (clientAccounts.length === 0) {
+        quickBox.classList.add('hidden');
+        return;
+      }
+
+      quickBox.classList.remove('hidden');
+      listEl.innerHTML = clientAccounts.map(u => `
+        <button
+          type="button"
+          onclick="fillQuickAccount('${u.id}')"
+          class="px-2.5 py-1 text-[11px] rounded-md border border-subtle bg-paper hover:border-forest hover:text-forest transition-colors inline-flex items-center gap-1"
+          title="Rellenar credenciales guardadas"
+        >
+          <span class="font-medium">@${escapeAttr(u.username)}</span>
+          ${u.twoFactorEnabled ? '<span class="text-[9px] px-1 rounded bg-sageBg text-sageText">2FA</span>' : ''}
+        </button>
+      `).join('');
+    }
+
+    function fillQuickAccount(uid) {
+      const u = users.find(item => item.id === uid);
+      if (!u) return;
+      setAuthMode('login');
+      document.getElementById('auth-email').value = u.email;
+      document.getElementById('auth-password').value = u.password;
+      showToast(`Credenciales cargadas para @${u.username}.`);
+    }
+
+    // --- AUTENTICACIÓN + GOOGLE AUTHENTICATOR ---
+    function setAuthMode(mode) {
+      authMode = mode;
+      pending2FAUserId = null;
+      const isReg = mode === 'register';
+      document.getElementById('auth-form').classList.remove('hidden');
+      document.getElementById('auth-2fa-form').classList.add('hidden');
+      document.getElementById('auth-tabs-row').classList.remove('hidden');
+
+      document.getElementById('auth-title').textContent = isReg ? 'Crear Cuenta' : 'Iniciar Sesión';
+      document.getElementById('auth-subtitle').textContent = isReg
+        ? 'Crea tu cuenta para desbloquear tus sistemas con código individual.'
+        : 'Ingresa con tu correo electrónico o nombre de usuario.';
+      document.getElementById('auth-submit-btn').textContent = isReg ? 'Registrarme' : 'Entrar a mi cuenta';
+      document.getElementById('field-register-extra').classList.toggle('hidden', !isReg);
+      document.getElementById('field-login-identifier').classList.toggle('hidden', isReg);
+      document.getElementById('quick-db-access-box').classList.toggle('hidden', isReg);
+      document.getElementById('auth-error').classList.add('hidden');
+
+      document.getElementById('auth-email').required = !isReg;
+      document.getElementById('auth-reg-email').required = isReg;
+
+      document.getElementById('tab-login').className = `pb-2.5 pr-4 font-medium border-b-2 ${!isReg ? 'border-forest text-ink' : 'border-transparent text-mutedInk hover:text-ink'}`;
+      document.getElementById('tab-register').className = `pb-2.5 px-4 font-medium border-b-2 ${isReg ? 'border-forest text-ink' : 'border-transparent text-mutedInk hover:text-ink'}`;
+      if (!isReg) renderQuickDatabaseAccess();
+    }
+
+    function completeLoginForUser(found) {
+      const devCheck = registerDeviceSession(found);
+      if (!devCheck.ok) {
+        const errEl = document.getElementById('auth-error');
+        errEl.textContent = `Se alcanzó el límite de ${devCheck.limit} sesiones simultáneas en esta cuenta. Cierra sesión en otro dispositivo o solicita liberar tu acceso.`;
+        errEl.classList.remove('hidden');
+        return false;
+      }
+
+      currentUserId = found.id;
+      saveState();
+      showToast(`Bienvenido, ${found.firstName || found.name}.`);
+      if (found.role === 'admin') {
+        navigate('admin');
+      } else {
+        navigate('access');
+      }
+      return true;
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const password = document.getElementById('auth-password').value;
+      const errEl = document.getElementById('auth-error');
+      errEl.classList.add('hidden');
+
+      if (authMode === 'register') {
+        const firstName = document.getElementById('auth-firstname').value.trim();
+        const lastName = document.getElementById('auth-lastname').value.trim();
+        const username = document.getElementById('auth-username').value.trim().toLowerCase().replace(/^@/, '');
+        const email = document.getElementById('auth-reg-email').value.trim().toLowerCase();
+
+        if (!firstName || !lastName) {
+          errEl.textContent = 'Ingresa tu nombre y apellidos.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+          errEl.textContent = 'El usuario debe tener entre 3 y 24 caracteres (letras, números o _).';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        if (!email || !email.includes('@')) {
+          errEl.textContent = 'Ingresa un correo electrónico válido.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        if (users.some(u => u.email.toLowerCase() === email)) {
+          errEl.textContent = 'Este correo electrónico ya está registrado.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        if (users.some(u => (u.username || '').toLowerCase() === username)) {
+          errEl.textContent = 'Ese nombre de usuario ya está en uso.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        const newUser = {
+          id: 'usr-' + Date.now(),
+          firstName,
+          lastName,
+          name: `${firstName} ${lastName}`.trim(),
+          username,
+          email,
+          password,
+          role: 'user',
+          status: 'active',
+          twoFactorEnabled: false,
+          twoFactorSecret: '',
+          maxDevices: 2,
+          activeDevices: [{
+            deviceId: currentDeviceId,
+            label: getDeviceLabel(),
+            lastSeen: new Date().toISOString()
+          }],
+          unlockedIds: []
+        };
+        users.push(newUser);
+        currentUserId = newUser.id;
+        saveState();
+        sendRegistrationConfirmationEmail(newUser);
+        showToast(`Cuenta creada y correo de confirmación enviado a ${email}.`);
+        document.getElementById('auth-form').reset();
+        navigate('access');
+      } else {
+        const identifier = document.getElementById('auth-email').value.trim().toLowerCase().replace(/^@/, '');
+        const found = users.find(u =>
+          (u.email.toLowerCase() === identifier || (u.username || '').toLowerCase() === identifier) &&
+          u.password === password
+        );
+        if (!found) {
+          errEl.textContent = 'Credenciales incorrectas.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        // Si el usuario tiene Google Authenticator habilitado, solicitar código TOTP de 6 dígitos
+        if (found.twoFactorEnabled && found.twoFactorSecret) {
+          pending2FAUserId = found.id;
+          document.getElementById('auth-form').classList.add('hidden');
+          document.getElementById('auth-tabs-row').classList.add('hidden');
+          document.getElementById('auth-2fa-form').classList.remove('hidden');
+          document.getElementById('auth-2fa-user-label').textContent = `@${found.username}`;
+          document.getElementById('auth-2fa-code').value = '';
+          document.getElementById('auth-2fa-error').classList.add('hidden');
+          document.getElementById('auth-2fa-code').focus();
+          return;
+        }
+
+        if (completeLoginForUser(found)) {
+          document.getElementById('auth-form').reset();
+        }
+      }
+    }
+
+    async function handleVerify2FALogin(e) {
+      e.preventDefault();
+      const errEl = document.getElementById('auth-2fa-error');
+      errEl.classList.add('hidden');
+      const user = users.find(u => u.id === pending2FAUserId);
+      if (!user) {
+        cancel2FALogin();
+        return;
+      }
+      const code = document.getElementById('auth-2fa-code').value.trim();
+      const valid = await verifyTOTPCode(user.twoFactorSecret, code);
+      if (!valid) {
+        errEl.textContent = 'Código de Google Authenticator incorrecto o expirado. Verifica la hora de tu dispositivo.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      pending2FAUserId = null;
+      document.getElementById('auth-form').reset();
+      document.getElementById('auth-2fa-form').reset();
+      completeLoginForUser(user);
+    }
+
+    function cancel2FALogin() {
+      pending2FAUserId = null;
+      setAuthMode('login');
+    }
+
+    function logout() {
+      const user = getCurrentUser();
+      if (user) {
+        user.activeDevices = (user.activeDevices || []).filter(d => d.deviceId !== currentDeviceId);
+        const isAdmin = user.role === 'admin';
+        const displayName = user.firstName || user.name || 'usuario';
+        lastGoodbyeInfo = {
+          title: isAdmin ? 'Sesión de administración cerrada' : `Hasta pronto, ${displayName}`,
+          message: isAdmin
+            ? 'Has salido del Centro de Control de forma segura. Todos los cambios quedaron guardados.'
+            : 'Tu sesión se cerró correctamente. Cuando desees editar o descargar tus plantillas desbloqueadas, inicia sesión nuevamente.'
+        };
+      } else {
+        lastGoodbyeInfo = {
+          title: 'Gracias por tu visita',
+          message: 'Tu sesión ha finalizado.'
+        };
+      }
+
+      currentUserId = null;
+      saveState();
+      navigate('goodbye');
+    }
+
+    // --- MI PERFIL + CONFIGURACIÓN DE GOOGLE AUTHENTICATOR ---
+    function renderProfile() {
+      const user = getCurrentUser();
+      if (!user) return;
+      document.getElementById('profile-firstname').value = user.firstName || user.name.split(' ')[0] || '';
+      document.getElementById('profile-lastname').value = user.lastName || user.name.split(' ').slice(1).join(' ') || '';
+      document.getElementById('profile-username').value = user.username || '';
+      document.getElementById('profile-email').value = user.email;
+      document.getElementById('profile-feedback').classList.add('hidden');
+      document.getElementById('password-feedback').classList.add('hidden');
+      document.getElementById('password-change-form').reset();
+      renderGoogleAuthenticatorSection(user);
+    }
+
+    function renderGoogleAuthenticatorSection(user) {
+      const pill = document.getElementById('ga-status-pill');
+      const area = document.getElementById('ga-setup-area');
+      if (!pill || !area) return;
+
+      if (user.twoFactorEnabled) {
+        pill.textContent = 'Protegido (2FA Activo)';
+        pill.className = 'shrink-0 text-[11px] font-medium px-2.5 py-1 rounded-full bg-sageBg text-sageText border border-emerald-200';
+        area.innerHTML = `
+          <div class="bg-sageBg/70 border border-emerald-200 rounded-md p-4 space-y-2">
+            <p class="text-xs font-semibold text-sageText">Google Authenticator está activo en tu cuenta</p>
+            <p class="text-xs text-ink/80">Cada vez que inicies sesión se solicitará el código temporal de 6 dígitos generado en tu aplicación Google Authenticator.</p>
+          </div>
+          <button type="button" onclick="disableGoogleAuthenticator()" class="px-4 py-2 text-xs font-medium rounded-md border border-terracotta text-terracotta hover:bg-terracotta hover:text-white transition-colors">
+            Desactivar Google Authenticator
+          </button>
+        `;
+        return;
+      }
+
+      pill.textContent = 'Desactivado';
+      pill.className = 'shrink-0 text-[11px] font-medium px-2.5 py-1 rounded-full bg-stone-100 text-mutedInk';
+
+      if (!pendingGASecret) {
+        area.innerHTML = `
+          <p class="text-xs text-mutedInk leading-relaxed">
+            Vincula tu cuenta con la app <strong>Google Authenticator</strong> (iOS o Android) escaneando el código QR o ingresando la clave secreta manualmente.
+          </p>
+          <button type="button" onclick="startGoogleAuthenticatorSetup()" class="px-4 py-2.5 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+            Configurar Google Authenticator
+          </button>
+        `;
+      } else {
+        const otpUri = buildOtpAuthUri(user, pendingGASecret);
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=168x168&data=${encodeURIComponent(otpUri)}`;
+        area.innerHTML = `
+          <div class="bg-paper border border-subtle rounded-lg p-4 space-y-4">
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+              <img src="${qrUrl}" alt="Código QR Google Authenticator" class="w-36 h-36 rounded-md border border-subtle bg-white p-1.5 shrink-0" />
+              <div class="space-y-2 text-xs">
+                <p class="font-semibold text-ink">1. Escanea el código QR con Google Authenticator</p>
+                <p class="text-mutedInk">Si prefieres ingresarlo manualmente en la app, usa esta clave de configuración (basada en tiempo):</p>
+                <div class="flex items-center gap-2">
+                  <code class="px-2.5 py-1 bg-card border border-subtle rounded font-mono text-forest font-semibold select-all">${pendingGASecret}</code>
+                  <button type="button" onclick="copyGASecret()" class="px-2 py-1 text-[11px] rounded border border-subtle bg-card hover:border-forest">Copiar</button>
+                </div>
+              </div>
+            </div>
+
+            <form onsubmit="confirmGoogleAuthenticatorSetup(event)" class="pt-3 border-t border-subtle space-y-2.5">
+              <label class="block text-xs font-semibold text-ink">2. Ingresa el código de 6 dígitos que aparece en la app para confirmar:</label>
+              <div class="flex gap-2">
+                <input type="text" id="ga-verify-input" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required placeholder="000000" class="w-40 px-3 py-2 text-center font-mono tracking-widest text-sm bg-card border border-subtle rounded-md focus:outline-none focus:border-forest" />
+                <button type="submit" class="px-4 py-2 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover">
+                  Activar Protección
+                </button>
+                <button type="button" onclick="cancelGoogleAuthenticatorSetup()" class="px-3 py-2 text-xs text-mutedInk hover:text-ink">
+                  Cancelar
+                </button>
+              </div>
+              <p id="ga-setup-feedback" class="hidden text-xs text-terracotta"></p>
+            </form>
+          </div>
+        `;
+      }
+    }
+
+    function startGoogleAuthenticatorSetup() {
+      const user = getCurrentUser();
+      if (!user) return;
+      pendingGASecret = generateBase32Secret(16);
+      renderGoogleAuthenticatorSection(user);
+    }
+
+    function cancelGoogleAuthenticatorSetup() {
+      const user = getCurrentUser();
+      pendingGASecret = null;
+      if (user) renderGoogleAuthenticatorSection(user);
+    }
+
+    function copyGASecret() {
+      if (!pendingGASecret) return;
+      if (navigator.clipboard) navigator.clipboard.writeText(pendingGASecret).catch(() => {});
+      showToast('Clave secreta copiada al portapapeles.');
+    }
+
+    async function confirmGoogleAuthenticatorSetup(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user || !pendingGASecret) return;
+      const code = document.getElementById('ga-verify-input').value.trim();
+      const fb = document.getElementById('ga-setup-feedback');
+      const ok = await verifyTOTPCode(pendingGASecret, code);
+      if (!ok) {
+        fb.textContent = 'El código no coincide. Asegúrate de ingresar los 6 dígitos actuales de Google Authenticator.';
+        fb.classList.remove('hidden');
+        return;
+      }
+      user.twoFactorEnabled = true;
+      user.twoFactorSecret = pendingGASecret;
+      pendingGASecret = null;
+      saveState();
+      renderGoogleAuthenticatorSection(user);
+      showToast('Google Authenticator activado correctamente.');
+    }
+
+    function disableGoogleAuthenticator() {
+      const user = getCurrentUser();
+      if (!user) return;
+      user.twoFactorEnabled = false;
+      user.twoFactorSecret = '';
+      pendingGASecret = null;
+      saveState();
+      renderGoogleAuthenticatorSection(user);
+      showToast('Google Authenticator desactivado.');
+    }
+
+    function handleProfileSave(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user) return;
+
+      const firstName = document.getElementById('profile-firstname').value.trim();
+      const lastName = document.getElementById('profile-lastname').value.trim();
+      const username = document.getElementById('profile-username').value.trim().toLowerCase().replace(/^@/, '');
+      const fb = document.getElementById('profile-feedback');
+
+      if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+        fb.textContent = 'El nombre de usuario debe tener entre 3 y 24 caracteres (letras, números o guion bajo).';
+        fb.className = 'text-xs px-3 py-2 rounded bg-terraBg text-terracotta border border-terracotta/20';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      if (users.some(u => u.id !== user.id && (u.username || '').toLowerCase() === username)) {
+        fb.textContent = 'Ese nombre de usuario ya está ocupado por otra cuenta.';
+        fb.className = 'text-xs px-3 py-2 rounded bg-terraBg text-terracotta border border-terracotta/20';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.name = `${firstName} ${lastName}`.trim();
+      user.username = username;
+      saveState();
+      updateHeader();
+
+      fb.textContent = 'Datos de perfil actualizados correctamente.';
+      fb.className = 'text-xs px-3 py-2 rounded bg-sageBg text-sageText border border-emerald-200';
+      fb.classList.remove('hidden');
+      showToast('Datos de perfil guardados.');
+    }
+
+    function handlePasswordChange(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user) return;
+
+      const currentPwd = document.getElementById('pwd-current').value;
+      const newPwd = document.getElementById('pwd-new').value;
+      const confirmPwd = document.getElementById('pwd-confirm').value;
+      const fb = document.getElementById('password-feedback');
+
+      if (currentPwd !== user.password) {
+        fb.textContent = 'La contraseña actual no coincide con tu cuenta.';
+        fb.className = 'text-xs px-3 py-2 rounded bg-terraBg text-terracotta border border-terracotta/20';
+        fb.classList.remove('hidden');
+        return;
+      }
+      if (newPwd.length < 6) {
+        fb.textContent = 'La nueva contraseña debe tener al menos 6 caracteres.';
+        fb.className = 'text-xs px-3 py-2 rounded bg-terraBg text-terracotta border border-terracotta/20';
+        fb.classList.remove('hidden');
+        return;
+      }
+      if (newPwd !== confirmPwd) {
+        fb.textContent = 'La confirmación no coincide con la nueva contraseña.';
+        fb.className = 'text-xs px-3 py-2 rounded bg-terraBg text-terracotta border border-terracotta/20';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      user.password = newPwd;
+      saveState();
+      document.getElementById('password-change-form').reset();
+
+      fb.textContent = 'Contraseña actualizada correctamente. Úsala en tu próximo inicio de sesión.';
+      fb.className = 'text-xs px-3 py-2 rounded bg-sageBg text-sageText border border-emerald-200';
+      fb.classList.remove('hidden');
+      showToast('Contraseña actualizada con éxito.');
+    }
+
+    // --- SUGERENCIAS Y CONTACTO DE SOPORTE ---
+    function prefillUserForms() {
+      const user = getCurrentUser();
+      if (!user) return;
+      if (document.getElementById('sug-name') && !document.getElementById('sug-name').value) {
+        document.getElementById('sug-name').value = user.name;
+      }
+      if (document.getElementById('sug-email') && !document.getElementById('sug-email').value) {
+        document.getElementById('sug-email').value = user.email;
+      }
+      if (document.getElementById('contact-name') && !document.getElementById('contact-name').value) {
+        document.getElementById('contact-name').value = user.name;
+      }
+      if (document.getElementById('contact-email') && !document.getElementById('contact-email').value) {
+        document.getElementById('contact-email').value = user.email;
+      }
+    }
+
+    function handleSuggestionSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('sug-name').value.trim();
+      const email = document.getElementById('sug-email').value.trim();
+      const category = document.getElementById('sug-category').value;
+      const format = document.getElementById('sug-format').value;
+      const title = document.getElementById('sug-title').value.trim();
+      const details = document.getElementById('sug-details').value.trim();
+
+      suggestionsDB.unshift({
+        id: 'sug-' + Date.now(),
+        name,
+        email,
+        category,
+        format,
+        title,
+        details,
+        createdAt: new Date().toLocaleString('es-MX')
+      });
+      saveState();
+
+      const fb = document.getElementById('sug-feedback');
+      fb.textContent = '¡Gracias! Tu sugerencia de nuevo producto quedó registrada para nuestro equipo de desarrollo.';
+      fb.className = 'text-xs px-3 py-2 rounded bg-sageBg text-sageText border border-emerald-200';
+      fb.classList.remove('hidden');
+      e.target.reset();
+      prefillUserForms();
+      showToast('Sugerencia enviada correctamente.');
+    }
+
+    function copySupportEmail() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(SUPPORT_EMAIL).catch(() => {});
+      }
+      showToast(`Correo ${SUPPORT_EMAIL} copiado.`);
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const topic = document.getElementById('contact-topic').value;
+      const message = document.getElementById('contact-message').value.trim();
+
+      supportTicketsDB.unshift({
+        id: 'tck-' + Date.now(),
+        name,
+        email,
+        topic,
+        message,
+        createdAt: new Date().toLocaleString('es-MX')
+      });
+      saveState();
+
+      const subject = encodeURIComponent(`[Soporte Núcleo Digital] ${topic} - ${name}`);
+      const body = encodeURIComponent(
+        `Nombre: ${name}
+Correo del cliente: ${email}
+Motivo: ${topic}
+
+Detalle del problema:
+${message}`
+      );
+      try {
+        const mailLink = document.createElement('a');
+        mailLink.href = `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`;
+        mailLink.style.display = 'none';
+        document.body.appendChild(mailLink);
+        mailLink.click();
+        document.body.removeChild(mailLink);
+      } catch (err) {}
+
+      const fb = document.getElementById('contact-feedback');
+      fb.textContent = `Reporte enviado a ${SUPPORT_EMAIL}. Nuestro equipo revisará tu caso a la brevedad.`;
+      fb.className = 'text-xs px-3 py-2 rounded bg-sageBg text-sageText border border-emerald-200';
+      fb.classList.remove('hidden');
+      e.target.reset();
+      prefillUserForms();
+      showToast('Ticket enviado a soportenucleodigital5@gmail.com.');
+    }
+
+    // --- TARJETA REUTILIZABLE DE PRODUCTO ---
+    function renderProductCardHTML(prod) {
+      const user = getCurrentUser();
+      const unlocked = isProductUnlockedForUser(user, prod.id);
+      const isBlockedAccount = user && user.status === 'blocked';
+      const typeLabel = prod.fileType === 'word' ? 'Word (.doc)' : 'Excel (.xlsx)';
+
+      let actionBtn = '';
+      if (isBlockedAccount) {
+        actionBtn = `<span class="text-xs font-medium text-terracotta">Cuenta restringida</span>`;
+      } else if (unlocked) {
+        actionBtn = `<button onclick="openTemplateEditor('${prod.id}')" class="px-3 py-1.5 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">Editar / Exportar</button>`;
+      } else {
+        actionBtn = `<button onclick="promptUnlockProduct('${prod.id}')" class="px-3 py-1.5 text-xs font-medium rounded-md border border-stone-300 bg-paper text-ink hover:border-forest hover:text-forest transition-colors inline-flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-mutedInk" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+          Bloqueado · Ingresar código
+        </button>`;
+      }
+
+      return `
+        <article class="bg-card/95 backdrop-blur-sm border border-subtle rounded-lg p-5 flex flex-col justify-between space-y-5 hover:border-stone-300 transition-colors">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2 text-xs">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="uppercase tracking-wider text-forest font-semibold">${prod.category}</span>
+                <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-paper border border-subtle text-mutedInk">${typeLabel}</span>
+              </div>
+              <span class="text-mutedInk font-medium">$${prod.price} MXN</span>
+            </div>
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="font-editorial text-xl text-ink leading-snug">${prod.title}</h3>
+              ${unlocked
+                ? '<span class="shrink-0 text-[10px] font-medium px-2 py-0.5 rounded-full bg-sageBg text-sageText">Desbloqueado</span>'
+                : '<span class="shrink-0 text-[10px] font-medium px-2 py-0.5 rounded-full bg-stone-100 text-mutedInk">Bloqueado</span>'}
+            </div>
+            <p class="text-xs sm:text-sm text-mutedInk leading-relaxed">${prod.description}</p>
+          </div>
+          <div class="pt-3 border-t border-subtle flex items-center justify-between">
+            <button onclick="openProductModal('${prod.id}')" class="text-xs font-medium text-mutedInk hover:text-ink underline underline-offset-4">
+              Ver detalles
+            </button>
+            ${actionBtn}
+          </div>
+        </article>
+      `;
+    }
+
+    // --- CATÁLOGO GENERAL ---
+    function renderCatalog() {
+      const categories = ['Todos', ...new Set(products.map(p => p.category))];
+      const filterContainer = document.getElementById('category-filters');
+      filterContainer.innerHTML = categories.map(cat => {
+        const active = cat === selectedCategory;
+        return `<button onclick="selectCategory('${cat}')" class="px-3 py-1 text-xs font-medium rounded-md border transition-colors ${active ? 'bg-forest text-white border-forest' : 'bg-card text-mutedInk border-subtle hover:text-ink'}">${cat}</button>`;
+      }).join('');
+
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = products.filter(p => {
+        const matchesCat = selectedCategory === 'Todos' || p.category === selectedCategory;
+        const matchesText = p.title.toLowerCase().includes(query) || p.description.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
+        return matchesCat && matchesText;
+      });
+
+      const grid = document.getElementById('catalog-grid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-sm text-mutedInk bg-card border border-subtle rounded-lg">No se encontraron sistemas con ese criterio.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(prod => renderProductCardHTML(prod)).join('');
+    }
+
+    function selectCategory(cat) {
+      selectedCategory = cat;
+      renderCatalog();
+    }
+
+    // --- VISTA SEPARADA POR TIPO DE ARCHIVO (EXCEL VS WORD) ---
+    function setFormatTab(tab) {
+      selectedFormatTab = tab;
+      document.getElementById('format-tab-excel').className = tab === 'excel'
+        ? 'px-4 py-2 text-sm font-medium rounded-md bg-forest text-white'
+        : 'px-4 py-2 text-sm font-medium rounded-md bg-card border border-subtle text-ink hover:bg-paper';
+      document.getElementById('format-tab-word').className = tab === 'word'
+        ? 'px-4 py-2 text-sm font-medium rounded-md bg-forest text-white'
+        : 'px-4 py-2 text-sm font-medium rounded-md bg-card border border-subtle text-ink hover:bg-paper';
+      renderFormatsView();
+    }
+
+    function renderFormatsView() {
+      const excelCount = products.filter(p => (p.fileType || 'excel') === 'excel').length;
+      const wordCount = products.filter(p => p.fileType === 'word').length;
+      const filtered = products.filter(p => (p.fileType || 'excel') === selectedFormatTab);
+
+      const banner = document.getElementById('format-summary-banner');
+      if (selectedFormatTab === 'excel') {
+        banner.innerHTML = `Mostrando <strong>${excelCount} plantillas tipo Excel (.xlsx)</strong>: hojas de cálculo editables en línea con soporte para agregar filas y columnas, descarga en <strong>.xlsx</strong> y exportación a <strong>.PDF</strong>.`;
+      } else {
+        banner.innerHTML = `Mostrando <strong>${wordCount} plantillas tipo Word (.doc)</strong>: documentos ejecutivos, propuestas, contratos y manuales editables con tablas ampliables, descarga en <strong>.doc</strong> y exportación a <strong>.PDF</strong>.`;
+      }
+
+      const grid = document.getElementById('formats-grid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-sm text-mutedInk bg-card border border-subtle rounded-lg">No hay archivos disponibles en esta categoría de formato.</div>`;
+        return;
+      }
+      grid.innerHTML = filtered.map(prod => renderProductCardHTML(prod)).join('');
+    }
+
+    // --- BLOQUEO INDIVIDUAL Y CANJE DE CÓDIGO POR PRODUCTO ---
+    function promptUnlockProduct(productId) {
+      const user = getCurrentUser();
+      if (!user) {
+        showToast('Inicia sesión o crea una cuenta para ingresar el código de desbloqueo de este producto.');
+        navigate('auth');
+        setAuthMode('login');
+        return;
+      }
+      if (user.status === 'blocked') {
+        showToast('Tu cuenta se encuentra bloqueada.');
+        return;
+      }
+      openProductModal(productId);
+    }
+
+    function openProductModal(id) {
+      const prod = products.find(p => p.id === id);
+      if (!prod) return;
+      activeModalProductId = id;
+
+      document.getElementById('modal-category').textContent = prod.category;
+      document.getElementById('modal-filetype-badge').textContent = prod.fileType === 'word' ? 'Documento tipo Word (.doc)' : 'Hoja tipo Excel (.xlsx)';
+      document.getElementById('modal-title').textContent = prod.title;
+      document.getElementById('modal-desc').textContent = prod.description;
+      document.getElementById('modal-price').textContent = `$${prod.price} MXN`;
+      document.getElementById('modal-features').innerHTML = (prod.features || ['Editor web interactivo', 'Exportación inmediata']).map(f => `<li>${f}</li>`).join('');
+
+      const user = getCurrentUser();
+      const unlocked = isProductUnlockedForUser(user, prod.id);
+      const isBlocked = user && user.status === 'blocked';
+      const actionArea = document.getElementById('modal-action-area');
+      const unlockBox = document.getElementById('modal-unlock-box');
+      const modalFb = document.getElementById('modal-code-feedback');
+      modalFb.classList.add('hidden');
+      document.getElementById('modal-code-input').value = '';
+
+      if (isBlocked) {
+        unlockBox.classList.add('hidden');
+        actionArea.innerHTML = `<span class="text-xs font-medium text-terracotta">Cuenta bloqueada por administrador</span>`;
+      } else if (unlocked) {
+        unlockBox.classList.add('hidden');
+        actionArea.innerHTML = `<button onclick="closeModal(); openTemplateEditor('${prod.id}');" class="px-4 py-2 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover">Abrir en Editor</button>`;
+      } else if (!user) {
+        unlockBox.classList.add('hidden');
+        actionArea.innerHTML = `<button onclick="closeModal(); navigate('auth');" class="px-4 py-2 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover">Iniciar sesión para desbloquear</button>`;
+      } else {
+        unlockBox.classList.remove('hidden');
+        actionArea.innerHTML = `<span class="text-xs text-mutedInk">Requiere su clave única</span>`;
+      }
+
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      activeModalProductId = null;
+      document.getElementById('product-modal').classList.add('hidden');
+    }
+
+    function handleModalCodeUnlock(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      const fb = document.getElementById('modal-code-feedback');
+      if (!user || !activeModalProductId) return;
+
+      const codeVal = document.getElementById('modal-code-input').value;
+      const matchedProduct = findProductByCurrentCode(codeVal);
+
+      if (!matchedProduct) {
+        fb.textContent = 'Código inválido o expirado (rotan cada 2 horas).';
+        fb.className = 'text-[11px] text-terracotta';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      if (matchedProduct.id !== activeModalProductId) {
+        fb.textContent = `Ese código pertenece a "${matchedProduct.title}", no a este producto. Ingresa el código específico de esta plantilla.`;
+        fb.className = 'text-[11px] text-terracotta';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      if (!user.unlockedIds.includes(matchedProduct.id)) {
+        user.unlockedIds.push(matchedProduct.id);
+        saveState();
+      }
+
+      showToast(`Producto "${matchedProduct.title}" desbloqueado de forma exclusiva.`);
+      closeModal();
+      renderCatalog();
+      if (!document.getElementById('view-formats').classList.contains('hidden')) renderFormatsView();
+      if (!document.getElementById('view-access').classList.contains('hidden')) renderAccess();
+    }
+
+    function handleRedeemProductCode(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      const fb = document.getElementById('redeem-feedback');
+
+      if (!user) {
+        showToast('Primero inicia sesión en tu cuenta.');
+        navigate('auth');
+        return;
+      }
+      if (user.status === 'blocked') {
+        fb.textContent = 'Tu cuenta está bloqueada y no puede canjear códigos.';
+        fb.className = 'text-xs px-3 py-2 rounded bg-terraBg text-terracotta border border-terracotta/20';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      const codeVal = document.getElementById('product-access-code-input').value;
+      const matchedProduct = findProductByCurrentCode(codeVal);
+
+      if (!matchedProduct) {
+        fb.textContent = 'Código inválido o expirado (los códigos rotan cada 2 horas y desbloquean un solo producto).';
+        fb.className = 'text-xs px-3 py-2 rounded bg-terraBg text-terracotta border border-terracotta/20';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      if (!user.unlockedIds.includes(matchedProduct.id)) {
+        user.unlockedIds.push(matchedProduct.id);
+        saveState();
+      }
+
+      document.getElementById('product-access-code-input').value = '';
+      fb.textContent = `Código validado. Se desbloqueó únicamente: ${matchedProduct.title}. Los demás productos siguen bloqueados hasta ingresar sus respectivos códigos.`;
+      fb.className = 'text-xs px-3 py-2 rounded bg-sageBg text-sageText border border-emerald-200';
+      fb.classList.remove('hidden');
+      showToast(`Desbloqueado únicamente "${matchedProduct.title}".`);
+      renderAccess();
+    }
+
+    // --- VISTA MIS ACCESOS ---
+    function renderAccess() {
+      const user = getCurrentUser();
+      const badgeEl = document.getElementById('account-status-badge');
+      const contentEl = document.getElementById('access-content');
+      const redeemBox = document.getElementById('code-redeem-box');
+
+      if (!user) {
+        badgeEl.innerHTML = '';
+        redeemBox.classList.add('hidden');
+        contentEl.innerHTML = `
+          <div class="bg-card border border-subtle rounded-lg p-8 text-center max-w-lg mx-auto space-y-4">
+            <h3 class="font-editorial text-xl text-ink">Inicia sesión para gestionar tus accesos</h3>
+            <p class="text-sm text-mutedInk">Necesitas una cuenta activa para ingresar el código individual de cada producto, editar filas/columnas y descargar tus archivos.</p>
+            <div class="flex justify-center gap-3 pt-2">
+              <button onclick="navigate('auth'); setAuthMode('login');" class="px-4 py-2 text-sm font-medium rounded-md bg-forest text-white hover:bg-forestHover">Iniciar Sesión</button>
+              <button onclick="navigate('auth'); setAuthMode('register');" class="px-4 py-2 text-sm font-medium rounded-md border border-subtle bg-paper text-ink">Crear Cuenta</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      redeemBox.classList.remove('hidden');
+      const isBlocked = user.status === 'blocked';
+      badgeEl.innerHTML = isBlocked
+        ? `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-terraBg text-terracotta border border-terracotta/20">Estado: Acceso Bloqueado</span>`
+        : `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-sageBg text-sageText border border-emerald-200">Estado: Cuenta Activa</span>`;
+
+      if (isBlocked) {
+        contentEl.innerHTML = `
+          <div class="bg-terraBg border border-terracotta/25 rounded-lg p-6 space-y-2">
+            <h3 class="text-base font-semibold text-terracotta">Acceso suspendido por el administrador</h3>
+            <p class="text-sm text-ink/80">
+              Tu cuenta (<strong>${user.email}</strong>) tiene el acceso y las descargas temporalmente bloqueados.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      const unlockedProducts = products.filter(p => isProductUnlockedForUser(user, p.id));
+      const lockedProducts = products.filter(p => !isProductUnlockedForUser(user, p.id));
+
+      let html = '';
+
+      if (unlockedProducts.length === 0) {
+        html += `
+          <div class="bg-card border border-subtle rounded-lg p-6 text-center space-y-2">
+            <h3 class="font-editorial text-xl text-ink">Ningún producto desbloqueado aún</h3>
+            <p class="text-xs sm:text-sm text-mutedInk">Todos los sistemas permanecen bloqueados por seguridad. Ingresa arriba el código individual del producto que deseas habilitar.</p>
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-ink">Productos Desbloqueados (${unlockedProducts.length})</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              ${unlockedProducts.map(prod => {
+                const isWord = prod.fileType === 'word';
+                return `
+                  <div class="bg-card border border-subtle rounded-lg p-5 flex flex-col justify-between gap-4">
+                    <div class="space-y-1">
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs uppercase tracking-wider text-forest font-semibold">${prod.category}</span>
+                        <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-paper border border-subtle text-mutedInk">${isWord ? 'Tipo Word (.doc)' : 'Tipo Excel (.xlsx)'}</span>
+                      </div>
+                      <h3 class="font-editorial text-lg text-ink">${prod.title}</h3>
+                      <p class="text-xs text-mutedInk">${prod.description}</p>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-subtle">
+                      <button onclick="openTemplateEditor('${prod.id}')" class="px-3.5 py-1.5 text-xs font-medium rounded-md bg-forest text-white hover:bg-forestHover transition-colors">
+                        Editar Filas/Columnas y .PDF
+                      </button>
+                      ${isWord
+                        ? `<button onclick="downloadWordDocument('${prod.id}')" class="px-3.5 py-1.5 text-xs font-medium rounded-md border border-subtle bg-paper text-ink hover:bg-stone-200/60 transition-colors">Descargar .doc</button>`
+                        : `<button onclick="downloadWorkbook('${prod.id}')" class="px-3.5 py-1.5 text-xs font-medium rounded-md border border-subtle bg-paper text-ink hover:bg-stone-200/60 transition-colors">Descargar .xlsx</button>`}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (lockedProducts.length > 0) {
+        html += `
+          <div class="space-y-3 pt-4">
+            <h3 class="text-sm font-semibold text-mutedInk">Productos Bloqueados (${lockedProducts.length} · requieren código individual)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              ${lockedProducts.map(prod => `
+                <div class="bg-paper border border-subtle rounded-lg p-4 flex items-center justify-between gap-3">
+                  <div class="min-w-0">
+                    <span class="text-[10px] uppercase tracking-wider text-mutedInk block">${prod.category} · ${prod.fileType === 'word' ? 'Word' : 'Excel'}</span>
+                    <p class="text-sm font-medium text-ink truncate">${prod.title}</p>
+                  </div>
+                  <button onclick="openProductModal('${prod.id}')" class="shrink-0 px-2.5 py-1 text-xs font-medium rounded border border-subtle bg-card text-ink hover:border-forest hover:text-forest">
+                    Ingresar clave
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      contentEl.innerHTML = html;
+    }
+
+    // --- EDITOR EN LÍNEA CON CONTROL DE LÍMITE DE COLUMNAS EN EXCEL ---
+    function getDefaultEditorData(prod) {
+      const key = prod.templateKey || 'quotes';
+      if (key === 'finance') {
+        return {
+          layout: 'finance',
+          docTitle: prod.title,
+          ownerNote: 'Presupuesto operativo y control de flujo de caja',
+          headers: ['Concepto', 'Categoría', 'Monto (MXN)', 'Tipo'],
+          rows: [
+            ['Ingresos por servicios / ventas', 'Ingresos', 26500, 'Ingreso'],
+            ['Renta y servicios fijos', 'Gastos Fijos', 9200, 'Egreso'],
+            ['Ahorro programado', 'Ahorro', 4500, 'Reserva']
+          ]
+        };
+      }
+      if (key === 'macros') {
+        return {
+          layout: 'macros',
+          docTitle: prod.title,
+          ownerNote: 'Registro nutricional diario en gramos y calorías',
+          headers: ['Alimento / Comida', 'Gramos (g)', 'Proteína (g)', 'Carbos (g)', 'Grasas (g)'],
+          rows: [
+            ['Pechuga de pollo cocida', 200, 62, 0, 7.2],
+            ['Arroz cocido', 180, 4.8, 50.4, 0.5],
+            ['Yogurt griego natural', 220, 22, 8, 0]
+          ]
+        };
+      }
+      if (key === 'ops') {
+        return {
+          layout: 'ops',
+          docTitle: prod.title,
+          ownerNote: 'Seguimiento de oportunidades, responsables y valor estimado',
+          headers: ['Cuenta / Prospecto', 'Etapa', 'Valor (MXN)', 'Probabilidad (%)'],
+          rows: [
+            ['Cuenta Comercial Norte', 'Negociación', 18000, 80],
+            ['Proyecto Diseño & Sistemas', 'Propuesta', 12000, 50],
+            ['Renovación Mensual', 'Cierre', 9500, 100]
+          ]
+        };
+      }
+      if (key === 'content') {
+        return {
+          layout: 'content',
+          docTitle: prod.title,
+          ownerNote: 'Planificación editorial y distribución de piezas',
+          headers: ['Fecha', 'Canal', 'Enfoque / Gancho', 'Estado'],
+          rows: [
+            ['2026-11-25', 'Video Corto', 'Cómo estructurar márgenes claros', 'Programado'],
+            ['2026-11-27', 'Carrusel', 'Errores comunes al presupuestar', 'Borrador'],
+            ['2026-11-29', 'Boletín', 'Resumen semanal de métricas', 'Listo']
+          ]
+        };
+      }
+      if (key === 'study') {
+        return {
+          layout: 'study',
+          docTitle: prod.title,
+          ownerNote: 'Matriz de materias, repaso espaciado y horas de estudio',
+          headers: ['Materia / Área', 'Tema', 'Horas', 'Dominio (1-5)'],
+          rows: [
+            ['Matemáticas Aplicadas', 'Geometría Analítica', 5.5, 4],
+            ['Química Orgánica', 'Nomenclatura y Reacciones', 4.0, 3],
+            ['Derecho Corporativo', 'Estructura Societaria', 6.0, 5]
+          ]
+        };
+      }
+      if (key === 'word_doc') {
+        return {
+          layout: 'word_doc',
+          docTitle: prod.title,
+          ownerNote: 'Documento ejecutivo con cláusulas, entregables y especificaciones',
+          headers: ['Sección / Cláusula', 'Descripción / Alcance', 'Responsable', 'Observaciones'],
+          rows: [
+            ['1. Objeto y Alcance', 'Definición de entregables principales y estándares de calidad.', 'Proveedor / Equipo', 'Aprobado'],
+            ['2. Plazos y Entregas', 'Cronograma semanal de revisión y validación de avances.', 'Ambas partes', 'Vigente'],
+            ['3. Confidencialidad', 'Protección estricta de información operativa y comercial.', 'Cliente y Proveedor', 'Obligatorio']
+          ]
+        };
+      }
+      return {
+        layout: 'quotes',
+        docTitle: prod.title,
+        ownerNote: 'Propuesta económica con desglose de margen e impuesto',
+        headers: ['Partida / Concepto', 'Cantidad', 'Costo Unit. (MXN)', 'Precio Venta (MXN)'],
+        rows: [
+          ['Implementación inicial', 1, 1400, 3800],
+          ['Configuración y soporte', 2, 500, 1350]
+        ]
+      };
+    }
+
+    function openTemplateEditor(productId) {
+      const user = getCurrentUser();
+      if (!user || user.status === 'blocked') {
+        showToast('Acceso no disponible.');
+        return;
+      }
+      const prod = products.find(p => p.id === productId);
+      if (!prod) return;
+
+      if (!isProductUnlockedForUser(user, prod.id)) {
+        showToast('Este producto está bloqueado. Ingresa su código individual para desbloquearlo.');
+        openProductModal(productId);
+        return;
+      }
+
+      activeEditorProductId = productId;
+      const editKey = `${user.id}_${productId}`;
+      if (!customEdits[editKey]) {
+        customEdits[editKey] = getDefaultEditorData(prod);
+        saveState();
+      }
+      navigate('editor');
+    }
+
+    function getActiveEditorData() {
+      const user = getCurrentUser();
+      if (!user || !activeEditorProductId) return null;
+      const editKey = `${user.id}_${activeEditorProductId}`;
+      return customEdits[editKey];
+    }
+
+    function syncExcelColumnAlertState(prod, data) {
+      const warningBox = document.getElementById('excel-column-warning');
+      const warningText = document.getElementById('excel-column-warning-text');
+      const addColBtn = document.getElementById('editor-add-col-btn');
+      if (!warningBox || !prod || !data) return;
+
+      const isExcel = (prod.fileType || 'excel') === 'excel';
+      const colCount = data.headers.length;
+
+      if (isExcel && colCount >= EXCEL_RECOMMENDED_COLUMNS) {
+        warningText.textContent = 'Cuidado, el límite recomendado de columnas ha sido alcanzado.';
+        warningBox.classList.remove('hidden');
+      } else {
+        warningBox.classList.add('hidden');
+      }
+
+      if (addColBtn) {
+        if (isExcel && colCount >= EXCEL_MAX_COLUMNS) {
+          addColBtn.disabled = true;
+          addColBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+          addColBtn.disabled = false;
+          addColBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      }
+    }
+
+    function renderDynamicTableHTML(data, headerRowClass, numericStartCol) {
+      return `
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="${headerRowClass}">
+                ${data.headers.map((h, cIdx) => `
+                  <th class="py-2 px-2.5 text-left font-medium min-w-[130px]">
+                    <div class="flex items-center gap-1">
+                      <input
+                        type="text"
+                        value="${escapeAttr(h)}"
+                        oninput="updateEditorHeader(${cIdx}, this.value)"
+                        title="Editar nombre de columna"
+                        class="w-full bg-transparent border-b border-current/25 focus:outline-none text-xs font-semibold"
+                      />
+                      ${data.headers.length > 1 ? `
+                        <button onclick="removeEditorColumn(${cIdx})" title="Eliminar columna" class="opacity-65 hover:opacity-100 text-xs px-1">&times;</button>
+                      ` : ''}
+                    </div>
+                  </th>
+                `).join('')}
+                <th class="py-2 px-2 w-10 text-center text-[11px] opacity-75">Fila</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stoneLine">
+              ${data.rows.map((row, rIdx) => `
+                <tr>
+                  ${data.headers.map((_, cIdx) => {
+                    const cellVal = row[cIdx] !== undefined ? row[cIdx] : '';
+                    const isNum = cIdx >= numericStartCol && typeof cellVal === 'number';
+                    return `
+                      <td class="p-1.5">
+                        <input
+                          type="${isNum ? 'number' : 'text'}"
+                          step="any"
+                          value="${escapeAttr(cellVal)}"
+                          oninput="updateEditorCell(${rIdx}, ${cIdx}, this.value, ${isNum})"
+                          class="w-full px-2.5 py-1.5 text-sm bg-paper border border-subtle rounded ${isNum ? 'text-right font-mono' : ''}"
+                        />
+                      </td>
+                    `;
+                  }).join('')}
+                  <td class="p-1.5 text-center">
+                    <button onclick="removeEditorRow(${rIdx})" class="text-mutedInk hover:text-terracotta text-xs px-1.5" title="Eliminar fila">&times;</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderEditor() {
+      const prod = products.find(p => p.id === activeEditorProductId);
+      const data = getActiveEditorData();
+      if (!prod || !data) return;
+
+      const isWord = prod.fileType === 'word';
+      document.getElementById('editor-product-title').textContent = prod.title;
+      document.getElementById('editor-format-pill').textContent = isWord ? 'Documento tipo Word (.doc)' : 'Hoja tipo Excel (.xlsx)';
+      document.getElementById('editor-product-subtitle').textContent = `Categoría: ${prod.category} · Agrega o edita filas y columnas antes de exportar tu archivo.`;
+      document.getElementById('editor-primary-file-btn').textContent = isWord ? 'Descargar .doc' : 'Descargar .xlsx';
+
+      syncExcelColumnAlertState(prod, data);
+
+      const canvas = document.getElementById('editor-canvas');
+
+      if (data.layout === 'finance' || data.layout === 'quotes') {
+        const totalColIdx = data.layout === 'finance' ? 2 : 3;
+        const sumTotal = data.rows.reduce((acc, r) => acc + (Number(r[totalColIdx]) || 0), 0);
+
+        canvas.innerHTML = `
+          <div class="bg-card border-t-4 border-t-forest border border-subtle rounded-lg p-6 space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-forest mb-1">Título del documento</label>
+                <input type="text" value="${escapeAttr(data.docTitle)}" oninput="updateEditorMeta('docTitle', this.value)" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+              </div>
+              <div>
+                <label class="block text-[11px] uppercase tracking-wider font-semibold text-forest mb-1">Nota ejecutiva / Cliente</label>
+                <input type="text" value="${escapeAttr(data.ownerNote)}" oninput="updateEditorMeta('ownerNote', this.value)" class="w-full px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+              </div>
+            </div>
+
+            ${renderDynamicTableHTML(data, 'bg-forest text-white text-xs', 2)}
+
+            <div class="flex justify-end pt-2 border-t border-subtle">
+              <div class="bg-paper border border-subtle rounded-md px-4 py-2.5 text-right">
+                <span class="text-[11px] uppercase tracking-wider text-mutedInk block">Suma columna principal</span>
+                <span id="editor-live-sum" class="text-base font-semibold font-mono text-forest">$${sumTotal.toLocaleString('es-MX')} MXN</span>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (data.layout === 'macros') {
+        const totalGrams = data.rows.reduce((acc, r) => acc + (Number(r[1]) || 0), 0);
+        const totalProtein = data.rows.reduce((acc, r) => acc + (Number(r[2]) || 0), 0);
+        const totalCarbs = data.rows.reduce((acc, r) => acc + (Number(r[3]) || 0), 0);
+        const totalFat = data.rows.reduce((acc, r) => acc + (Number(r[4]) || 0), 0);
+        const totalKcal = Math.round(totalProtein * 4 + totalCarbs * 4 + totalFat * 9);
+
+        canvas.innerHTML = `
+          <div class="bg-card border border-subtle rounded-xl p-6 space-y-5">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div class="bg-paper border border-subtle rounded-lg p-3">
+                <span class="text-[11px] text-mutedInk block">Peso Total</span>
+                <span id="macro-sum-g" class="text-lg font-semibold text-ink">${totalGrams} g</span>
+              </div>
+              <div class="bg-paper border border-subtle rounded-lg p-3">
+                <span class="text-[11px] text-mutedInk block">Proteína</span>
+                <span id="macro-sum-p" class="text-lg font-semibold text-forest">${totalProtein.toFixed(1)} g</span>
+              </div>
+              <div class="bg-paper border border-subtle rounded-lg p-3">
+                <span class="text-[11px] text-mutedInk block">Carbos / Grasas</span>
+                <span id="macro-sum-cf" class="text-sm font-semibold text-ink">${totalCarbs.toFixed(1)}g / ${totalFat.toFixed(1)}g</span>
+              </div>
+              <div class="bg-sageBg border border-emerald-200 rounded-lg p-3">
+                <span class="text-[11px] text-sageText block">Calorías Est.</span>
+                <span id="macro-sum-kcal" class="text-lg font-semibold text-sageText">${totalKcal} kcal</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" value="${escapeAttr(data.docTitle)}" oninput="updateEditorMeta('docTitle', this.value)" placeholder="Título de la ficha" class="px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+              <input type="text" value="${escapeAttr(data.ownerNote)}" oninput="updateEditorMeta('ownerNote', this.value)" placeholder="Objetivo o fase" class="px-3 py-2 text-sm bg-paper border border-subtle rounded-md" />
+            </div>
+
+            ${renderDynamicTableHTML(data, 'border-b-2 border-forest text-xs text-ink bg-paper', 1)}
+          </div>
+        `;
+      } else if (data.layout === 'word_doc') {
+        canvas.innerHTML = `
+          <div class="bg-card border border-subtle rounded-lg p-6 sm:p-8 space-y-5 max-w-4xl mx-auto">
+            <div class="border-b border-subtle pb-4 space-y-2">
+              <span class="text-[10px] uppercase tracking-widest text-forest font-semibold">Documento Ejecutivo · Formato Word</span>
+              <input type="text" value="${escapeAttr(data.docTitle)}" oninput="updateEditorMeta('docTitle', this.value)" class="w-full font-editorial text-2xl bg-transparent focus:outline-none text-ink" />
+              <input type="text" value="${escapeAttr(data.ownerNote)}" oninput="updateEditorMeta('ownerNote', this.value)" class="w-full text-xs text-mutedInk bg-transparent focus:outline-none" />
+            </div>
+
+            ${renderDynamicTableHTML(data, 'bg-paper border-b border-subtle text-xs text-ink', 99)}
+          </div>
+        `;
+      } else {
+        canvas.innerHTML = `
+          <div class="bg-card border border-subtle rounded-lg p-6 space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-subtle pb-4">
+              <div class="flex-1 space-y-1">
+                <label class="text-[10px] uppercase tracking-widest text-mutedInk">Título del Sistema</label>
+                <input type="text" value="${escapeAttr(data.docTitle)}" oninput="updateEditorMeta('docTitle', this.value)" class="w-full px-3 py-1.5 text-sm bg-paper border border-subtle rounded-md font-medium" />
+              </div>
+              <div class="flex-1 space-y-1">
+                <label class="text-[10px] uppercase tracking-widest text-mutedInk">Enfoque / Periodo</label>
+                <input type="text" value="${escapeAttr(data.ownerNote)}" oninput="updateEditorMeta('ownerNote', this.value)" class="w-full px-3 py-1.5 text-sm bg-paper border border-subtle rounded-md" />
+              </div>
+            </div>
+
+            ${renderDynamicTableHTML(data, 'bg-paper border-b border-subtle text-xs text-mutedInk', 2)}
+          </div>
+        `;
+      }
+    }
+
+    function escapeAttr(val) {
+      return String(val ?? '').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    }
+
+    function updateEditorMeta(field, value) {
+      const data = getActiveEditorData();
+      if (!data) return;
+      data[field] = value;
+      saveState();
+    }
+
+    function updateEditorHeader(colIdx, value) {
+      const data = getActiveEditorData();
+      if (!data) return;
+      data.headers[colIdx] = value;
+      saveState();
+    }
+
+    function updateEditorCell(rowIdx, colIdx, value, isNum) {
+      const data = getActiveEditorData();
+      if (!data || !data.rows[rowIdx]) return;
+      data.rows[rowIdx][colIdx] = isNum ? (Number(value) || 0) : value;
+      saveState();
+
+      if (data.layout === 'finance' || data.layout === 'quotes') {
+        const totalColIdx = data.layout === 'finance' ? 2 : 3;
+        const sumTotal = data.rows.reduce((acc, r) => acc + (Number(r[totalColIdx]) || 0), 0);
+        const sumEl = document.getElementById('editor-live-sum');
+        if (sumEl) sumEl.textContent = `$${sumTotal.toLocaleString('es-MX')} MXN`;
+      } else if (data.layout === 'macros') {
+        const g = data.rows.reduce((acc, r) => acc + (Number(r[1]) || 0), 0);
+        const p = data.rows.reduce((acc, r) => acc + (Number(r[2]) || 0), 0);
+        const c = data.rows.reduce((acc, r) => acc + (Number(r[3]) || 0), 0);
+        const f = data.rows.reduce((acc, r) => acc + (Number(r[4]) || 0), 0);
+        const kcal = Math.round(p * 4 + c * 4 + f * 9);
+        if (document.getElementById('macro-sum-g')) document.getElementById('macro-sum-g').textContent = `${g} g`;
+        if (document.getElementById('macro-sum-p')) document.getElementById('macro-sum-p').textContent = `${p.toFixed(1)} g`;
+        if (document.getElementById('macro-sum-cf')) document.getElementById('macro-sum-cf').textContent = `${c.toFixed(1)}g / ${f.toFixed(1)}g`;
+        if (document.getElementById('macro-sum-kcal')) document.getElementById('macro-sum-kcal').textContent = `${kcal} kcal`;
+      }
+    }
+
+    function addEditorRow() {
+      const data = getActiveEditorData();
+      if (!data) return;
+      const newRow = data.headers.map((_, idx) => {
+        if (data.layout === 'macros') return idx === 0 ? 'Nuevo alimento' : 0;
+        if (data.layout === 'ops') return idx === 0 ? 'Nuevo registro' : idx === 1 ? 'Activo' : 0;
+        if (data.layout === 'finance' || data.layout === 'quotes') return idx === 0 ? 'Nueva partida' : idx === 1 ? 'General' : 0;
+        return idx === 0 ? 'Nuevo elemento' : 'Detalle';
+      });
+      data.rows.push(newRow);
+      saveState();
+      renderEditor();
+      showToast('Fila agregada.');
+    }
+
+    function removeEditorRow(rowIdx) {
+      const data = getActiveEditorData();
+      if (!data || data.rows.length <= 1) {
+        showToast('Mantén al menos una fila en la plantilla.');
+        return;
+      }
+      data.rows.splice(rowIdx, 1);
+      saveState();
+      renderEditor();
+    }
+
+    function addEditorColumn() {
+      const prod = products.find(p => p.id === activeEditorProductId);
+      const data = getActiveEditorData();
+      if (!prod || !data) return;
+
+      const isExcel = (prod.fileType || 'excel') === 'excel';
+      if (isExcel && data.headers.length >= EXCEL_MAX_COLUMNS) {
+        showToast('Cuidado, el límite recomendado de columnas ha sido alcanzado.');
+        return;
+      }
+
+      const newColNum = data.headers.length + 1;
+      data.headers.push(`Columna ${newColNum}`);
+      data.rows.forEach(r => r.push(''));
+      saveState();
+      renderEditor();
+
+      if (isExcel && newColNum >= EXCEL_RECOMMENDED_COLUMNS) {
+        showToast('Cuidado, el límite recomendado de columnas ha sido alcanzado.');
+      } else {
+        showToast(`Columna ${newColNum} agregada.`);
+      }
+    }
+
+    function removeEditorColumn(colIdx) {
+      const data = getActiveEditorData();
+      if (!data || data.headers.length <= 1) {
+        showToast('Mantén al menos una columna en la plantilla.');
+        return;
+      }
+      data.headers.splice(colIdx, 1);
+      data.rows.forEach(r => r.splice(colIdx, 1));
+      saveState();
+      renderEditor();
+      showToast('Columna eliminada.');
+    }
+
+    function saveEditorChanges() {
+      saveState();
+      showToast('Cambios guardados en tu cuenta.');
+    }
+
+    function downloadActiveProductPrimaryFile() {
+      const prod = products.find(p => p.id === activeEditorProductId);
+      if (!prod) return;
+      if (prod.fileType === 'word') {
+        downloadWordDocument(prod.id);
+      } else {
+        downloadWorkbook(prod.id);
+      }
+    }
+
+    // --- EXPORTACIÓN PDF CON MARCA DE AGUA INTERNA DE FONDO ---
+    function exportEditorToPDF() {
+      const user = getCurrentUser();
+      if (!user || user.status === 'blocked') {
+        showToast('Acceso no disponible.');
+        return;
+      }
+      const data = getActiveEditorData();
+      if (!data || !window.jspdf || !window.jspdf.jsPDF) {
+        showToast('No se pudo inicializar el generador PDF.');
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+      doc.saveGraphicsState();
+      if (typeof doc.GState === 'function') {
+        doc.setGState(new doc.GState({ opacity: 0.08 }));
+      }
+      doc.setTextColor(27, 67, 50);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(34);
+      doc.text('NÚCLEO DIGITAL · OFICIAL', 32, 165, { angle: 35 });
+      doc.setFontSize(14);
+      doc.text(`LICENCIA EXCLUSIVA · @${(user.username || 'CLIENTE').toUpperCase()}`, 45, 182, { angle: 35 });
+      doc.restoreGraphicsState();
+
+      doc.setFillColor(27, 67, 50);
+      doc.rect(0, 0, 210, 26, 'F');
+      doc.setTextColor(250, 249, 246);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('NÚCLEO DIGITAL · nucleodigital.mx', 14, 12);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.text(String(data.docTitle || 'Plantilla Operativa'), 14, 19);
+
+      doc.setTextColor(28, 25, 23);
+      doc.setFontSize(10);
+      doc.text(`Nota / Referencia: ${data.ownerNote || '-'}`, 14, 35);
+      doc.setFontSize(8.5);
+      doc.setTextColor(87, 83, 78);
+      doc.text(`Titular: ${user.name} (@${user.username || 'usuario'}) · Fecha: ${new Date().toLocaleDateString('es-MX')}`, 14, 41);
+
+      const bodyRows = data.rows.map(r => r.map(cell => String(cell ?? '')));
+
+      if (typeof doc.autoTable === 'function') {
+        doc.autoTable({
+          startY: 47,
+          head: [data.headers],
+          body: bodyRows,
+          theme: 'grid',
+          headStyles: { fillColor: [27, 67, 50], textColor: [255, 255, 255], fontSize: 9 },
+          bodyStyles: { fontSize: 8.5, textColor: [28, 25, 23] },
+          alternateRowStyles: { fillColor: [250, 249, 246] },
+          didDrawPage: function () {
+            doc.setFontSize(7.5);
+            doc.setTextColor(120, 113, 108);
+            doc.text('Documento protegido · Núcleo Digital (nucleodigital.mx)', 14, 290);
+          }
+        });
+      }
+
+      const fileSlug = (data.docTitle || 'plantilla').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+      doc.save(`${fileSlug}_nucleo_digital.pdf`);
+      showToast(`Descargando ${fileSlug}_nucleo_digital.pdf.`);
+    }
+
+    // --- DESCARGA REAL EXCEL (.XLSX) ---
+    function downloadWorkbook(productId) {
+      const user = getCurrentUser();
+      if (!user || user.status === 'blocked') {
+        showToast('Acceso denegado.');
+        return;
+      }
+      const prod = products.find(p => p.id === productId);
+      if (!prod || !isProductUnlockedForUser(user, prod.id) || typeof XLSX === 'undefined') {
+        showToast('Producto bloqueado. Ingresa su código individual primero.');
+        return;
+      }
+
+      const editKey = `${user.id}_${productId}`;
+      const editData = customEdits[editKey] || getDefaultEditorData(prod);
+
+      const wb = XLSX.utils.book_new();
+      const sheetMatrix = [
+        [`NÚCLEO DIGITAL · nucleodigital.mx · LICENCIA EXCLUSIVA PARA @${(user.username || user.name).toUpperCase()}`],
+        [`SISTEMA: ${editData.docTitle.toUpperCase()} (${prod.category})`],
+        [`Nota: ${editData.ownerNote} · Generado: ${new Date().toLocaleDateString('es-MX')}`],
+        [''],
+        editData.headers,
+        ...editData.rows,
+        [''],
+        [`PROPIEDAD INTELECTUAL PROTEGIDA · NÚCLEO DIGITAL · PROHIBIDA SU REVENTA NO AUTORIZADA`]
+      ];
+
+      const ws = XLSX.utils.aoa_to_sheet(sheetMatrix);
+      ws['!cols'] = editData.headers.map(() => ({ wch: 22 }));
+      XLSX.utils.book_append_sheet(wb, ws, 'Nucleo_Digital_Oficial');
+
+      const safeName = prod.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+      XLSX.writeFile(wb, `${safeName}_nucleo_digital.xlsx`);
+      showToast(`Descargando ${safeName}_nucleo_digital.xlsx.`);
+    }
+
+    // --- DESCARGA REAL DOCUMENTO TIPO WORD (.DOC) ---
+    function downloadWordDocument(productId) {
+      const user = getCurrentUser();
+      if (!user || user.status === 'blocked') {
+        showToast('Acceso denegado.');
+        return;
+      }
+      const prod = products.find(p => p.id === productId);
+      if (!prod || !isProductUnlockedForUser(user, prod.id)) {
+        showToast('Producto bloqueado. Ingresa su código individual primero.');
+        return;
+      }
+
+      const editKey = `${user.id}_${productId}`;
+      const editData = customEdits[editKey] || getDefaultEditorData(prod);
+
+      const tableRowsHtml = editData.rows.map(r => `
+        <tr>
+          ${editData.headers.map((_, idx) => `<td style="border:1px solid #d6d3d1; padding:8px; font-size:11pt;">${escapeAttr(r[idx] ?? '')}</td>`).join('')}
+        </tr>
+      `).join('');
+
+      const wordHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><meta charset='utf-8'><title>${escapeAttr(editData.docTitle)}</title>
+        <style>
+          body { font-family: Calibri, Arial, sans-serif; color: #1c1917; position: relative; }
+          .watermark {
+            position: fixed; top: 38%; left: 10%;
+            transform: rotate(-32deg);
+            font-size: 38pt; font-weight: bold;
+            color: rgba(27, 67, 50, 0.11);
+            z-index: -1; pointer-events: none;
+          }
+          table { border-collapse: collapse; width: 100%; margin-top: 14px; }
+          th { background-color: #1B4332; color: #ffffff; border: 1px solid #1B4332; padding: 8px; text-align: left; font-size: 11pt; }
+        </style>
+        </head>
+        <body>
+          <div class="watermark">NÚCLEO DIGITAL · OFICIAL</div>
+          <div style="border-bottom: 2px solid #1B4332; padding-bottom: 8px; margin-bottom: 14px;">
+            <p style="margin:0; font-size:9pt; color:#1B4332; font-weight:bold;">NÚCLEO DIGITAL · nucleodigital.mx · DOCUMENTO LICENCIADO</p>
+            <h1 style="margin:4px 0; font-size:18pt;">${escapeAttr(editData.docTitle)}</h1>
+            <p style="margin:0; font-size:10pt; color:#57534e;">${escapeAttr(editData.ownerNote)} · Titular autorizado: ${escapeAttr(user.name)} (@${escapeAttr(user.username || 'usuario')})</p>
+          </div>
+          <table>
+            <thead>
+              <tr>${editData.headers.map(h => `<th>${escapeAttr(h)}</th>`).join('')}</tr>
+            </thead>
+            <tbody>${tableRowsHtml}</tbody>
+          </table>
+          <p style="margin-top:24px; font-size:8.5pt; color:#78716c; border-top:1px solid #e7e5e4; padding-top:6px;">
+            Núcleo Digital (nucleodigital.mx) · Generado el ${new Date().toLocaleDateString('es-MX')}.
+          </p>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob(['﻿', wordHtml], { type: 'application/msword;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const safeName = prod.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+      link.href = url;
+      link.download = `${safeName}_nucleo_digital.doc`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast(`Descargando ${safeName}_nucleo_digital.doc.`);
+    }
+
+    // --- CENTRO DE CONTROL (ADMINISTRADOR) ---
+    function setAdminTab(tab) {
+      ['users', 'codes', 'products', 'inbox'].forEach(t => {
+        document.getElementById(`admin-panel-${t}`).classList.toggle('hidden', t !== tab);
+        document.getElementById(`admin-subtab-${t}`).className = t === tab
+          ? 'px-3.5 py-1.5 text-sm font-medium rounded-md bg-forest text-white'
+          : 'px-3.5 py-1.5 text-sm font-medium rounded-md bg-card border border-subtle text-ink hover:bg-paper';
+      });
+      if (tab === 'codes') {
+        renderAdminCodes();
+        updateTwoHourCountdown();
+      }
+      if (tab === 'inbox') {
+        renderAdminInbox();
+      }
+    }
+
+    function exportUsersDatabaseJSON() {
+      const payload = users.map(u => ({
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        password: u.password,
+        name: u.name,
+        role: u.role,
+        status: u.status,
+        twoFactorEnabled: !!u.twoFactorEnabled,
+        unlockedIds: u.unlockedIds
+      }));
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `base_datos_usuarios_nucleodigital_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Base de datos de usuarios exportada en .json.');
+    }
+
+    function renderAdmin() {
+      const totalUsers = users.filter(u => u.role !== 'admin').length;
+      const activeUsers = users.filter(u => u.role !== 'admin' && u.status === 'active').length;
+      const blockedUsers = users.filter(u => u.role !== 'admin' && u.status === 'blocked').length;
+
+      document.getElementById('admin-metrics').innerHTML = `
+        <div class="bg-card border border-subtle rounded-lg p-4">
+          <span class="text-xs text-mutedInk">Clientes en BD</span>
+          <p class="text-2xl font-semibold text-ink mt-1">${totalUsers}</p>
+        </div>
+        <div class="bg-card border border-subtle rounded-lg p-4">
+          <span class="text-xs text-mutedInk">Cuentas Activas</span>
+          <p class="text-2xl font-semibold text-forest mt-1">${activeUsers}</p>
+        </div>
+        <div class="bg-card border border-subtle rounded-lg p-4">
+          <span class="text-xs text-mutedInk">Sugerencias / Tickets</span>
+          <p class="text-2xl font-semibold text-ink mt-1">${suggestionsDB.length} / ${supportTicketsDB.length}</p>
+        </div>
+        <div class="bg-card border border-subtle rounded-lg p-4">
+          <span class="text-xs text-mutedInk">Sistemas en Catálogo</span>
+          <p class="text-2xl font-semibold text-ink mt-1">${products.length}</p>
+        </div>
+      `;
+
+      document.getElementById('admin-users-tbody').innerHTML = users.map(u => {
+        const isAdmin = u.role === 'admin';
+        const isBlocked = u.status === 'blocked';
+        const devList = Array.isArray(u.activeDevices) ? u.activeDevices : [];
+        const maxDev = u.maxDevices || 2;
+
+        return `
+          <tr>
+            <td class="py-3 px-4">
+              <div class="font-medium text-ink">${u.name}</div>
+              <div class="text-xs text-mutedInk">@${u.username || 'sin_usuario'} · ${u.email}</div>
+            </td>
+            <td class="py-3 px-4 font-mono text-xs text-ink">
+              ${escapeAttr(u.password)}
+            </td>
+            <td class="py-3 px-4 text-xs">
+              <div class="mb-1">
+                ${u.twoFactorEnabled
+                  ? '<span class="px-2 py-0.5 rounded bg-sageBg text-sageText text-[10px] font-medium">Google Auth: ON</span>'
+                  : '<span class="px-2 py-0.5 rounded bg-stone-100 text-mutedInk text-[10px]">Google Auth: OFF</span>'}
+              </div>
+              <span class="font-medium text-ink">${devList.length} / ${maxDev} disp.</span>
+              ${devList.length > 0 ? `<button onclick="clearUserDevices('${u.id}')" class="ml-1.5 text-terracotta underline hover:opacity-80">Liberar</button>` : ''}
+            </td>
+            <td class="py-3 px-4 text-xs text-mutedInk">
+              ${isAdmin ? `Todos (${products.length})` : `${u.unlockedIds.length} de ${products.length}`}
+            </td>
+            <td class="py-3 px-4">
+              ${isBlocked
+                ? '<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-terraBg text-terracotta">Bloqueado</span>'
+                : '<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-sageBg text-sageText">Activo</span>'}
+            </td>
+            <td class="py-3 px-4 text-right space-x-2">
+              ${isAdmin ? '<span class="text-xs text-mutedInk">Protegido</span>' : `
+                <button onclick="toggleUserBlock('${u.id}')" class="px-3 py-1 text-xs font-medium rounded border transition-colors ${isBlocked ? 'border-forest text-forest hover:bg-forest hover:text-white' : 'border-terracotta text-terracotta hover:bg-terracotta hover:text-white'}">
+                  ${isBlocked ? 'Desbloquear' : 'Bloquear'}
+                </button>
+                <button onclick="deleteUser('${u.id}')" class="px-2 py-1 text-xs text-mutedInk hover:text-terracotta">
+                  Eliminar
+                </button>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      renderAdminCodes();
+      renderAdminInbox();
+
+      document.getElementById('admin-products-tbody').innerHTML = products.map(p => `
+        <tr>
+          <td class="py-3 px-4 font-medium text-ink">${p.title}</td>
+          <td class="py-3 px-4 text-xs text-mutedInk">${p.category}</td>
+          <td class="py-3 px-4 text-xs font-medium text-ink">${p.fileType === 'word' ? 'Word (.doc)' : 'Excel (.xlsx)'}</td>
+          <td class="py-3 px-4 text-xs font-medium text-ink">$${p.price} MXN</td>
+          <td class="py-3 px-4 text-right">
+            <button onclick="deleteProduct('${p.id}')" class="text-xs text-terracotta hover:underline">Eliminar</button>
+          </td>
+        </tr>
+      `).join('');
+
+      updateTwoHourCountdown();
+    }
+
+    function renderAdminInbox() {
+      const sugEl = document.getElementById('admin-suggestions-list');
+      const tckEl = document.getElementById('admin-tickets-list');
+      if (sugEl) {
+        sugEl.innerHTML = suggestionsDB.length === 0
+          ? '<p class="text-xs text-mutedInk">Aún no hay sugerencias registradas.</p>'
+          : suggestionsDB.map(s => `
+              <div class="bg-paper border border-subtle rounded-md p-3 space-y-1 text-xs">
+                <div class="flex justify-between font-semibold text-ink">
+                  <span>${escapeAttr(s.title)}</span>
+                  <span class="text-forest">${escapeAttr(s.format)}</span>
+                </div>
+                <p class="text-mutedInk">${escapeAttr(s.details)}</p>
+                <p class="text-[11px] text-mutedInk/80">${escapeAttr(s.name)} (${escapeAttr(s.email)}) · ${escapeAttr(s.createdAt)}</p>
+              </div>
+            `).join('');
+      }
+      if (tckEl) {
+        tckEl.innerHTML = supportTicketsDB.length === 0
+          ? '<p class="text-xs text-mutedInk">No hay reportes de soporte pendientes.</p>'
+          : supportTicketsDB.map(t => `
+              <div class="bg-paper border border-subtle rounded-md p-3 space-y-1 text-xs">
+                <div class="flex justify-between font-semibold text-ink">
+                  <span>${escapeAttr(t.topic)}</span>
+                  <span class="text-mutedInk font-normal">${escapeAttr(t.createdAt)}</span>
+                </div>
+                <p class="text-mutedInk">${escapeAttr(t.message)}</p>
+                <p class="text-[11px] text-forest">${escapeAttr(t.name)} · ${escapeAttr(t.email)}</p>
+              </div>
+            `).join('');
+      }
+    }
+
+    function clearAdminCodesSearch() {
+      const input = document.getElementById('admin-codes-search');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      renderAdminCodes();
+    }
+
+    function renderAdminCodes() {
+      const tbody = document.getElementById('admin-codes-tbody');
+      if (!tbody) return;
+      const searchEl = document.getElementById('admin-codes-search');
+      const clearBtn = document.getElementById('admin-codes-clear');
+      const countEl = document.getElementById('admin-codes-count');
+      const query = (searchEl ? searchEl.value : '').trim().toLowerCase();
+
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', query.length === 0);
+      }
+
+      const winIdx = getTwoHourWindowIndex(0);
+      const filtered = products.filter(p => {
+        const code = generateProductCode(p.id, winIdx).toLowerCase();
+        const typeStr = p.fileType === 'word' ? 'word doc' : 'excel xlsx';
+        return !query ||
+          p.title.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query) ||
+          typeStr.includes(query) ||
+          code.includes(query);
+      });
+
+      if (countEl) {
+        countEl.textContent = `Mostrando ${filtered.length} de ${products.length} productos`;
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="py-8 px-4 text-center text-xs text-mutedInk">
+              No se encontraron productos que coincidan con "${escapeAttr(searchEl.value)}".
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        const code = generateProductCode(p.id, winIdx);
+        return `
+          <tr>
+            <td class="py-3 px-4 font-medium text-ink">${p.title}</td>
+            <td class="py-3 px-4 text-xs text-mutedInk">${p.category} · ${p.fileType === 'word' ? 'Word' : 'Excel'}</td>
+            <td class="py-3 px-4">
+              <span class="font-mono text-xs font-semibold px-2.5 py-1 rounded bg-paper border border-subtle text-forest">${code}</span>
+            </td>
+            <td class="py-3 px-4 text-right">
+              <button onclick="copyCode('${code}', '${escapeAttr(p.title)}')" class="px-3 py-1 text-xs font-medium rounded border border-forest text-forest hover:bg-forest hover:text-white transition-colors">
+                Copiar código
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function copyCode(code, title) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).catch(() => {});
+      }
+      showToast(`Código ${code} (${title}) listo para compartir.`);
+    }
+
+    function clearUserDevices(uid) {
+      const target = users.find(u => u.id === uid);
+      if (!target) return;
+      target.activeDevices = [];
+      saveState();
+      renderAdmin();
+      showToast(`Sesiones de dispositivos liberadas para ${target.name}.`);
+    }
+
+    function toggleUserBlock(uid) {
+      const target = users.find(u => u.id === uid);
+      if (!target || target.role === 'admin') return;
+      target.status = target.status === 'blocked' ? 'active' : 'blocked';
+      saveState();
+      renderAdmin();
+      showToast(target.status === 'blocked'
+        ? `Acceso bloqueado para ${target.name}.`
+        : `Acceso restaurado para ${target.name}.`);
+    }
+
+    function deleteUser(uid) {
+      users = users.filter(u => u.id !== uid);
+      saveState();
+      renderAdmin();
+      showToast('Usuario eliminado de la base de datos.');
+    }
+
+    function adminCreateUser(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('new-user-name').value.trim();
+      const parts = fullName.split(/\s+/);
+      const firstName = parts[0] || 'Cliente';
+      const lastName = parts.slice(1).join(' ') || 'Núcleo';
+      const username = document.getElementById('new-user-username').value.trim().toLowerCase().replace(/^@/, '');
+      const email = document.getElementById('new-user-email').value.trim().toLowerCase();
+      const password = document.getElementById('new-user-pass').value;
+
+      if (users.some(u => u.email === email || (u.username || '').toLowerCase() === username)) {
+        showToast('Ese correo o usuario ya existe en la base de datos.');
+        return;
+      }
+
+      users.push({
+        id: 'usr-' + Date.now(),
+        firstName,
+        lastName,
+        name: fullName,
+        username,
+        email,
+        password,
+        role: 'user',
+        status: 'active',
+        twoFactorEnabled: false,
+        twoFactorSecret: '',
+        maxDevices: 2,
+        activeDevices: [],
+        unlockedIds: []
+      });
+      saveState();
+      e.target.reset();
+      renderAdmin();
+      showToast(`Cuenta registrada en la base de datos para ${fullName}.`);
+    }
+
+    function adminAddProduct(e) {
+      e.preventDefault();
+      const title = document.getElementById('prod-title').value.trim();
+      const category = document.getElementById('prod-category').value.trim();
+      const fileType = document.getElementById('prod-file-type').value;
+      const price = Number(document.getElementById('prod-price').value);
+      const description = document.getElementById('prod-desc').value.trim();
+
+      products.push({
+        id: 'sys-' + Date.now(),
+        title,
+        category,
+        fileType,
+        price,
+        templateKey: fileType === 'word' ? 'word_doc' : 'quotes',
+        description,
+        features: [
+          fileType === 'word' ? 'Documento ejecutivo tipo Word (.doc) y .PDF' : 'Hoja de cálculo tipo Excel (.xlsx) con filas y columnas ampliables',
+          'Exportación directa lista para usar',
+          'Protegido con código individual de activación'
+        ]
+      });
+      saveState();
+      e.target.reset();
+      renderAdmin();
+      showToast('Nuevo sistema publicado en el catálogo.');
+    }
+
+    function deleteProduct(pid) {
+      products = products.filter(p => p.id !== pid);
+      saveState();
+      renderAdmin();
+      showToast('Producto eliminado del catálogo.');
+    }
+
+    // --- MÚSICA AMBIENTAL PROCEDURAL SIN DERECHOS DE AUTOR (ROTA CADA 10 MINUTOS) ---
+    const TEN_MINUTES_MS = 10 * 60 * 1000;
+    const AMBIENT_TRACKS = [
+      { name: 'Brisa Cálida', notes: [261.63, 329.63, 392.00, 493.88], stepMs: 950 },
+      { name: 'Bosque Sereno', notes: [220.00, 261.63, 329.63, 392.00], stepMs: 1100 },
+      { name: 'Enfoque Calmo', notes: [293.66, 349.23, 440.00, 523.25], stepMs: 1000 },
+      { name: 'Papel y Tinta', notes: [246.94, 293.66, 369.99, 440.00], stepMs: 1150 },
+      { name: 'Amanecer Suave', notes: [196.00, 246.94, 293.66, 392.00], stepMs: 1050 },
+      { name: 'Horizonte Claro', notes: [220.00, 329.63, 392.00, 493.88], stepMs: 1200 }
+    ];
+
+    let audioCtx = null;
+    let ambientEnabled = false;
+    let ambientTimer = null;
+    let manualTrackOverride = null;
+    let noteStepIndex = 0;
+
+    function getCurrentTrackIndex() {
+      if (manualTrackOverride !== null) return manualTrackOverride % AMBIENT_TRACKS.length;
+      return Math.floor(Date.now() / TEN_MINUTES_MS) % AMBIENT_TRACKS.length;
+    }
+
+    function updateAmbientLabel() {
+      const idx = getCurrentTrackIndex();
+      const btn = document.getElementById('ambient-toggle-btn');
+      const lbl = document.getElementById('ambient-track-label');
+      if (btn) {
+        btn.textContent = ambientEnabled ? 'Audio ambiental: Encendido' : 'Audio ambiental: Apagado';
+      }
+      if (lbl) {
+        lbl.textContent = `Pista ${idx + 1}/${AMBIENT_TRACKS.length} · ${AMBIENT_TRACKS[idx].name} (10m)`;
+      }
+    }
+
+    function playSoftTone(freq) {
+      if (!audioCtx || !ambientEnabled) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.025, now + 0.25);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.95);
+    }
+
+    function startAmbientLoop() {
+      clearInterval(ambientTimer);
+      const track = AMBIENT_TRACKS[getCurrentTrackIndex()];
+      ambientTimer = setInterval(() => {
+        if (!ambientEnabled) return;
+        updateAmbientLabel();
+        const activeTrack = AMBIENT_TRACKS[getCurrentTrackIndex()];
+        const freq = activeTrack.notes[noteStepIndex % activeTrack.notes.length];
+        playSoftTone(freq);
+        noteStepIndex++;
+      }, track.stepMs);
+    }
+
+    function toggleAmbientMusic() {
+      ambientEnabled = !ambientEnabled;
+      if (ambientEnabled) {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        startAmbientLoop();
+        const t = AMBIENT_TRACKS[getCurrentTrackIndex()];
+        playSoftTone(t.notes[0]);
+        showToast(`Audio ambiental activado (${t.name}).`);
+      } else {
+        clearInterval(ambientTimer);
+        showToast('Audio ambiental pausado.');
+      }
+      updateAmbientLabel();
+    }
+
+    function cycleAmbientTrack() {
+      const current = getCurrentTrackIndex();
+      manualTrackOverride = (current + 1) % AMBIENT_TRACKS.length;
+      noteStepIndex = 0;
+      if (ambientEnabled) {
+        startAmbientLoop();
+        const t = AMBIENT_TRACKS[getCurrentTrackIndex()];
+        playSoftTone(t.notes[0]);
+      }
+      updateAmbientLabel();
+    }
+
+    // --- INICIALIZACIÓN ---
+    window.addEventListener('DOMContentLoaded', () => {
+      syncUsersToIndexedDB();
+      updateHeader();
+      updateAmbientLabel();
+      setInterval(updateTwoHourCountdown, 1000);
+      setInterval(updateAmbientLabel, 15000);
+
+      const h = window.location.hash;
+      if (h === '#admin' || h === '#/panel-maestro-nd') {
+        const user = getCurrentUser();
+        if (user && user.role === 'admin') {
+          navigate('admin');
+        } else {
+          navigate('auth');
+          setAuthMode('login');
+        }
+      } else {
+        navigate('catalog');
+      }
+    });
+  </script>
+</body>
+</html>
